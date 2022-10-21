@@ -3,7 +3,9 @@
 //npm init
 //npm install --save-dev lite-server
 //npm start <-- lite server opens a browser page, each time we change something we need to run: tsc app.ts
-console.log('Your code goes here...');
+//console.log('Your code goes here...');
+//********* end GENERAL INSTRUCTIONS ********//
+
 //Typescript adds more types to javascript
 //CORE TYPES (already known by javascript)
 //number    (no differentiation between integer or floats)
@@ -21,7 +23,14 @@ const result = add(number1,number2);
 console.log(result); //with number1 set as a string results is wrong
 */
 function add(n1:number,n2:number):number {
-    return n1+n2;
+    //TYPE CHCEK IN JAVASCRIPT
+    // typeof <-- makes type check in javascript
+    // if(typeof n1 !== 'number' && typeof n2 !== 'number') { throw new Error('Incorrect Input!'); }
+    //difference: javascript is dynamically typed, check can be made at runtime
+    //typescript: is statically typed: we need to check types to successfully compile
+    //javascript fails at runtime, typescript at compile type
+    //typescript can check more types than javascript
+    return n1 + n2;
 }
 const number1 = 5;
 // set number1 wrongly as a text:
