@@ -1,3 +1,6 @@
+//change a commit message name: git commit --amend -m "new commit message"
+//****************************************
+//OBJECTS
 /* 
 const person = {
   name: "Maximilian",
@@ -36,7 +39,8 @@ const person: {
 //   age: 30,
 // };
 console.log(person.name); //prints the object
-
+//****************************************
+//NESTED OBJECTS
 /* 
 // Of course object types can also be created for nested objects.
 // Let's say you have this JavaScript object:
@@ -82,7 +86,8 @@ const product: nestedObj = {
   },
 };
 console.log(product);
-
+//****************************************
+//ARRAYS
 const newPerson = {
   name: "Maximilian",
   age: 30,
@@ -97,3 +102,22 @@ for (const hobby of newPerson.hobbies) {
   console.log(`Hobby: ${hobby.toUpperCase()}`);
   // console.log(hobby.map()); //!!! ERROR !!!, can't map a string
 }
+//****************************************
+//TUPLES
+//tuples are fixed lenght and fixed type array
+//
+const newPersonWithTuple: {
+  name: string;
+  age: number;
+  hobbies: string[];
+  role: [number, string];
+} = {
+  name: "Maximilian",
+  age: 30,
+  hobbies: ["Sports", "Cooking"],
+  role: [1, "Author"],
+};
+//role always has two elements: first is numeric (ex an id), the second a string (ex.description)
+// newPersonWithTuple.role = [1, "Boss", "American"]; //!!! ERROR !!! only three elements allowed
+// newPersonWithTuple.role.push("Admin"); //push is an exception, allowed by TypeScript
+//newPersonWithTuple.role[1] = 10; //!!! ERROR !!! second value of the tuple is a string
