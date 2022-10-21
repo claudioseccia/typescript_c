@@ -22,19 +22,28 @@ const number2 = 2.8;
 const result = add(number1,number2);
 console.log(result); //with number1 set as a string results is wrong
 */
-function add(n1:number,n2:number):number {
-    //TYPE CHCEK IN JAVASCRIPT
-    // typeof <-- makes type check in javascript
-    // if(typeof n1 !== 'number' && typeof n2 !== 'number') { throw new Error('Incorrect Input!'); }
-    //difference: javascript is dynamically typed, check can be made at runtime
-    //typescript: is statically typed: we need to check types to successfully compile
-    //javascript fails at runtime, typescript at compile type
-    //typescript can check more types than javascript
+function add(n1: number, n2: number, showResult: boolean, phrase: string) {
+  //TYPE CHCEK IN JAVASCRIPT
+  // typeof <-- makes type check in javascript
+  // if(typeof n1 !== 'number' && typeof n2 !== 'number') { throw new Error('Incorrect Input!'); }
+  //difference: javascript is dynamically typed, check can be made at runtime
+  //typescript: is statically typed: we need to check types to successfully compile
+  //javascript fails at runtime, typescript at compile type
+  //typescript can check more types than javascript
+  const result = n1 + n2;
+  if (showResult) {
+    //console.log(phrase + n1 + n2); //now everything gets converted to a text, use the calculation in a separate const
+    console.log(phrase + result);
+  } else {
     return n1 + n2;
+  }
 }
 const number1 = 5;
 // set number1 wrongly as a text:
 // const number1 = '5'; //throws an error with types set
 const number2 = 2.8;
-const result = add(number1,number2);
-console.log(result); //with number1 set as a string results is wrong
+const printResult = true;
+const resultPhrase = "Result is: ";
+
+const result = add(number1, number2, printResult, resultPhrase);
+//console.log(result); //with number1 set as a string results is wrong
