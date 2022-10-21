@@ -82,3 +82,18 @@ const product: nestedObj = {
   },
 };
 console.log(product);
+
+const newPerson = {
+  name: "Maximilian",
+  age: 30,
+  hobbies: ["Sports", "Cooking"],
+};
+// let favouriteActivities: string[] = ["Sports",2]; //error, mixed array
+// let favouriteActivities: any[] = ["Sports",2]; //correct, mixed array: any[] is defining an array of any type
+let favouriteActivities: string[] = ["Sports", "Music", "Cooking"]; //correct: strings[] is defining an array of strings
+console.log(newPerson);
+console.log(favouriteActivities);
+for (const hobby of newPerson.hobbies) {
+  console.log(`Hobby: ${hobby.toUpperCase()}`);
+  // console.log(hobby.map()); //!!! ERROR !!!, can't map a string
+}
