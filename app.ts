@@ -35,15 +35,21 @@ function add(n1: number, n2: number, showResult: boolean, phrase: string) {
     //console.log(phrase + n1 + n2); //now everything gets converted to a text, use the calculation in a separate const
     console.log(phrase + result);
   } else {
-    return n1 + n2;
+    return result;
   }
 }
-const number1 = 5;
 // set number1 wrongly as a text:
 // const number1 = '5'; //throws an error with types set
+// const number1 = 5;
+//ASSIGNING AND TYPE INFERENCE
+//typescript automatically understands the type declaring a variable and assigning a value
+//if we only declare a variable without declaring it we should assign the type (ex. let number3:number;)
+let number1: number;
+number1 = 5;
 const number2 = 2.8;
 const printResult = true;
 const resultPhrase = "Result is: ";
+// resultPhrase = 0; //throws an error, we're trying to assign a number to a previously declared string
 
 const result = add(number1, number2, printResult, resultPhrase);
 //console.log(result); //with number1 set as a string results is wrong
