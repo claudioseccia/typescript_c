@@ -148,7 +148,7 @@ enum AccessPermissions {
   READ = 4,
   WRITE,
   DELETE,
-} //strings or numbers can be assigned
+} //strings or numbers can be assigned, ex READ='READ', if number is assigned consecutive numbers are set for the other values
 
 const personWithEnum = {
   name: "Maximilian",
@@ -161,3 +161,9 @@ if (personWithEnum.role === Role.AUTHOR) {
   console.log(`Person is an Author`);
 }
 console.log(personWithEnum.permissions); //prints out 5
+//****************************************
+//ANY TYPE
+let favouriteThings: any[];
+favouriteThings = [4, "Pineapple", true];
+
+//****************************************
