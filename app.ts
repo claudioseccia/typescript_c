@@ -121,3 +121,43 @@ const newPersonWithTuple: {
 // newPersonWithTuple.role = [1, "Boss", "American"]; //!!! ERROR !!! only three elements allowed
 // newPersonWithTuple.role.push("Admin"); //push is an exception, allowed by TypeScript
 //newPersonWithTuple.role[1] = 10; //!!! ERROR !!! second value of the tuple is a string
+//****************************************
+//WORKING WITH ENUMS
+//enum only exists in typescript - Added by Typescript, Automatically enumerated global constant indentifiers
+//enum{NEW, OLD}
+//
+//vanilla javascript solution
+// const ADMIN = 0;
+// const READ_ONLY = 1;
+// const AUTHOR = 2;
+// const personWithEnum = {
+//   name: "Maximilian",
+//   age: 30,
+//   hobbies: ["Sports", "Cooking"],
+//   role: ADMIN,
+// };
+//
+//TypeScript solution
+//create a CUSTOM TYPE
+enum Role {
+  ADMIN,
+  READ_ONLY,
+  AUTHOR,
+}
+enum AccessPermissions {
+  READ = 4,
+  WRITE,
+  DELETE,
+} //strings or numbers can be assigned
+
+const personWithEnum = {
+  name: "Maximilian",
+  age: 30,
+  hobbies: ["Sports", "Cooking"],
+  role: Role.AUTHOR,
+  permissions: AccessPermissions.WRITE,
+};
+if (personWithEnum.role === Role.AUTHOR) {
+  console.log(`Person is an Author`);
+}
+console.log(personWithEnum.permissions); //prints out 5
