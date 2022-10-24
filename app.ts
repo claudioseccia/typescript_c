@@ -16,4 +16,21 @@ printResult(add(5, 12)); //Result: 17
 // console.log(printResult(add(5, 17))); //undefined, doing a console log of a function that returns undefined returns undefined
 //
 //****************************************
-//2.18
+//2.18 function as types
+/*
+let combineValues;
+combineValues = add; //store a pointer of a function in another variable
+combineValues = 8; //re-assign
+//tsc app.js:
+//compiles anyway because combinedValue is of type "any", but gives ERROR at runtime!!!
+console.log(combineValues(8, 8)); //!!! ERROR !!! app.js:23 Uncaught TypeError: combineValues is not a function
+*/
+//SOLUTION
+// let combineValues: Function;
+//FUNCTION TYPE:
+let combineValues: (a: number, b: number) => number;
+combineValues = add; //store a pointer of a function in another variable
+// combineValues = 8; //COMPILE ERROR, typescript checks the value!
+// combineValues = printResult; //works if we do not set function types, setting --> let combineValues: Function;
+// combineValues = printResult; //checked at runtime: Typescript is now throwing an error --> let combineValues: (a: number, b: number) => number;
+console.log(combineValues(8, 8));
