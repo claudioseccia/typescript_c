@@ -34,3 +34,14 @@ combineValues = add; //store a pointer of a function in another variable
 // combineValues = printResult; //works if we do not set function types, setting --> let combineValues: Function;
 // combineValues = printResult; //checked at runtime: Typescript is now throwing an error --> let combineValues: (a: number, b: number) => number;
 console.log(combineValues(8, 8));
+//
+//****************************************
+//2.19 function types and callbacks
+function addAndHandle(n1: number, n2: number, cb: (num: number) => void) {
+  const result = n1 + n2;
+  cb(result); //cb is a callback, we pass result to the callback function
+}
+addAndHandle(10, 20, (result) => {
+  console.log(result);
+  return result; //still working, void type doesn't care if something is returned or not
+});
