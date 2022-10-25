@@ -19,3 +19,7 @@ console.log(userName);
 //****************************************
 //3.4 Including and excluding files
 // see tsconfig.jscon in the "exclude" section
+
+//****************************************
+//3.4 Setting a compilation target
+//see "compilerOptions": { "target" .... option in tsconfig.json
