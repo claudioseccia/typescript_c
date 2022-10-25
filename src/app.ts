@@ -111,3 +111,13 @@ button.addEventListener("click", clickHandler.bind(null, "You're wellcome!"));
 //     return n1 + n2;
 //   }
 // }
+
+//****************************************
+//3.12 Debug in Vscode
+//place a breakpoint
+//set in launch.json port of the debugging page
+//set "sourceMap": true in tsconfig.json
+//tsc --watch
+//run debug
+//select chrome browser
+//-->it will open a window in chrome to run debugging
