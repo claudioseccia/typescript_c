@@ -45,3 +45,9 @@ button.addEventListener("click", () => {
 //in tsconfig.json
 //"allowjs": true   //<-- includes js files
 //"checkjs": true   //<-- checks js files
+
+//****************************************
+//3.7 Working with Source Maps
+//source maps helps us on development and debugging
+//generates a .js.map file too and it makes visible .ts typescript files in the chrome dev tools
+// in this way we can even set breakpoints to the ts code to debug !!!
