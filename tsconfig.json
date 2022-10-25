@@ -99,5 +99,16 @@
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
-  }
+  },
+  "exclude": [
+    /* exclude single files (ex "analytics.ts) or an entire folder */
+    /* or we can use a wildcard, ex "*.dev.ts" */
+    "./CH_2",
+    "node_modules"  //would be the default
+  ],
+  //"include": [
+    //this section will specify the files to include and excludes all the other
+    //"app.ts" 
+  //],
+  //"files": [ //list of files to be inclued ]
 }

@@ -8,6 +8,7 @@
 const userName = "Maximilian";
 // userName = 3; //!!! ERROR !!!
 console.log(userName);
+
 //****************************************
 //3.3 Compiling the entire project multiple files
 // tsc --init       <-- it creates a file: tsconfig.json with many rules to configure
@@ -15,3 +16,6 @@ console.log(userName);
 // tsc
 //we now compile all typescript files in the project
 // tsc --watch      <-- to go in watch mode (ctrl+c to exit)
+//****************************************
+//3.4 Including and excluding files
+// see tsconfig.jscon in the "exclude" section
