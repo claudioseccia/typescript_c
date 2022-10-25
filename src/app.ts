@@ -66,3 +66,8 @@ button.addEventListener("click", () => {
 
 //"removeComments": true, <-- this removes comments from compilation
 //"noEmit": true, <-- this will not export js
+
+//****************************************
+//3.9 Stop emitting files on compilation errors
+// "noEmitOnError": true, <-- default is false (when commented)
+// setting it on true js will not be generated when an error is detected by js
