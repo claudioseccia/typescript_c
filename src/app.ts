@@ -86,3 +86,22 @@ const add = (a: number, b: number = 10) => {
 };
 // console.log(add(2, 5)); //7
 console.log(add(5)); //15
+
+//****************************************
+//4.5 Spread operator
+const hobbies = ["Sports", "Cooking"];
+console.log(hobbies[0]);
+//const activeHobbies = ["Hiking"];
+//activeHobbies.push(hobbies); //ERROR -  in js nests the two arrays
+//activeHobbies.push(...hobbies); //WORKS spreads the hobbies array elements inside activeHobbies
+const activeHobbies = ["Hiking", ...hobbies]; //spread operator during array creation
+console.log(activeHobbies);
+
+//spread in objects
+const person = {
+  name: "Max",
+  age: 26,
+};
+// const copiedPerson = person; //copies the pointer in memory
+const copiedPerson = { ...person, hobbies: hobbies }; //copies all the values into the copiedPerson object
+console.log(copiedPerson);
