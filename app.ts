@@ -1,5 +1,5 @@
 //****************************************
-//3.1 Live/Watch Mode in compile time
+//3.2 Live/Watch Mode in compile time
 //LIVE MODE COMPILE!!!
 // tsc app.js --watch
 //or
@@ -8,3 +8,10 @@
 const userName = "Maximilian";
 // userName = 3; //!!! ERROR !!!
 console.log(userName);
+//****************************************
+//3.3 Compiling the entire project multiple files
+// tsc --init       <-- it creates a file: tsconfig.json with many rules to configure
+//with the command:
+// tsc
+//we now compile all typescript files in the project
+// tsc --watch      <-- to go in watch mode (ctrl+c to exit)
