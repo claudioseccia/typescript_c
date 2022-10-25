@@ -5,9 +5,9 @@
 //or
 // tsc app.js -w
 //--> watch mode: re-compile at any change
-const userName = "Maximilian";
-// userName = 3; //!!! ERROR !!!
-console.log(userName);
+// const userName = "Maximilian";
+// // userName = 3; //!!! ERROR !!!
+// console.log(userName);
 
 //****************************************
 //3.3 Compiling the entire project multiple files
@@ -23,3 +23,19 @@ console.log(userName);
 //****************************************
 //3.4 Setting a compilation target
 //see "compilerOptions": { "target" .... option in tsconfig.json
+
+//****************************************
+//3.5 Understanding typescript core libs
+const button = document.querySelector("button")!;
+button.addEventListener("click", () => {
+  console.log("clicked");
+});
+//if lib[] entry is not set in tsconfig.jscon all defaults like DOM are included (like running the js in the browser)
+//uncommenting we HAVE TO set in the array some values
+//ex these are the default settings (like if "lib":[] entry is commented)
+// "lib": [
+//     "dom",
+//     "es6",
+//     "dom.iterable",
+//     "scripthost"
+// ]
