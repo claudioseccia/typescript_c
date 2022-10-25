@@ -105,6 +105,7 @@
     /* exclude single files (ex "analytics.ts) or an entire folder */
     /* or we can use a wildcard, ex "*.dev.ts" */
     "./CH_2",
+    "./CH_3",
     "node_modules"  //would be the default
   ],
   //"include": [
