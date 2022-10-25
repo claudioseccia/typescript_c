@@ -90,7 +90,24 @@
 
 //strictBindCallApply
 const button = document.querySelector("button")!;
+
 function clickHandler(msg: string) {
   console.log("clicked " + msg);
 }
 button.addEventListener("click", clickHandler.bind(null, "You're wellcome!"));
+
+//****************************************
+//3.11 Code quality options
+//noUnusedLocals
+//throw errors if variables are set but not used etc... (unused global variables are allowed)
+
+//noUnusedParameters
+//checks for unused parameters in functions
+
+//noImplicitReturns etc...
+//this function does not always return something (ex. cases outside if statement)
+// function add(n1: number, n2: number) {
+//   if (n1 + n2 > 0) {
+//     return n1 + n2;
+//   }
+// }
