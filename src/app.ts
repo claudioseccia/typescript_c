@@ -54,3 +54,21 @@ age = 29; //can be changed
 //   let isOld = true; //var registers a variable always globally
 // }
 // console.log(isOld); //!!! ERROR !!! isOld is not defined
+
+//****************************************
+//4.3 Arrow functions
+//named function
+// const add = function() {
+//     //...
+// }
+
+//arrow function
+const add = (a: number, b: number) => {
+  return a + b;
+};
+//same as:
+// const add = (a: number, b: number) => a + b;
+// console.log(add(2, 5));
+
+// const printOutput = (output: string | number) => console.log(output);
+// printOutput(add(5, 2));
