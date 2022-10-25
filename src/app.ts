@@ -51,3 +51,18 @@ button.addEventListener("click", () => {
 //source maps helps us on development and debugging
 //generates a .js.map file too and it makes visible .ts typescript files in the chrome dev tools
 // in this way we can even set breakpoints to the ts code to debug !!!
+
+//****************************************
+//3.8 rootDir and outDir
+//typically we have a src folder and a dist folder in our projects
+//src folder will hold all our typescript files
+//dist folder all the compiled files (all the javascript files)
+
+// to output all the compiled files into dist we set "outDir" as dist
+// if we create a subfolder and place file inside it the folder structure is replicated into dist folder
+
+// to make ts compiler watch only at src and its structure we set it as: "rootDir": "./src"
+//in this way files on other folders will be ignored, otherwise all files and folder also in the root will be watched
+
+//"removeComments": true, <-- this removes comments from compilation
+//"noEmit": true, <-- this will not export js
