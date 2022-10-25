@@ -81,11 +81,11 @@ if (button) {
 //4.4 Default function parameters
 //set the default parameter as last not to get error
 //const add = (a: number = 10, b: number) => { ... //gets an error
-const add = (a: number, b: number = 10) => {
-  return a + b;
-};
-// console.log(add(2, 5)); //7
-console.log(add(5)); //15
+// const add = (a: number, b: number = 10) => {
+//   return a + b;
+// };
+// // console.log(add(2, 5)); //7
+// console.log(add(5)); //15
 
 //****************************************
 //4.5 Spread operator
@@ -105,3 +105,22 @@ const person = {
 // const copiedPerson = person; //copies the pointer in memory
 const copiedPerson = { ...person, hobbies: hobbies }; //copies all the values into the copiedPerson object
 console.log(copiedPerson);
+
+//****************************************
+//4.6 Rest parameters
+//USED IN FUNCTION ARGUMENTS WHEN WE DON'T KNOW HOW MANY ARGUMENTS
+const add = (...numbers: number[]) => {
+  //handles infinite amounts
+  return numbers.reduce((currentResult, currentValue) => {
+    return currentResult + currentValue;
+  }, 0);
+};
+const addedNumber = add(5, 10, 2, 3.7, 12.5);
+console.log(addedNumber);
+
+//works also with tuples
+const combineAges = (...ages: [number, number, string]) => {
+  const sumOfAges = ages[0] + ages[1];
+  console.log(ages[2] + sumOfAges);
+};
+combineAges(22, 23, "The sum of the two ages is: "); //The sum of the two ages is: 45
