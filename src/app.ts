@@ -124,3 +124,26 @@ const combineAges = (...ages: [number, number, string]) => {
   console.log(ages[2] + sumOfAges);
 };
 combineAges(22, 23, "The sum of the two ages is: "); //The sum of the two ages is: 45
+
+//****************************************
+//4.7 Arrays and objects destructuring
+//ARRAY destructuring
+const sports = ["swimming", "boxe", "gym", "cycling"];
+// const sport1 = sports[0];
+// const sport2 = sports[1];
+// const sport3 = sports[2];
+//...
+const [sport1, sport2, ...remainingSports] = sports; //we now have variables: sport1, sport2 and an array of the remaining un-destructured array elements
+console.log(sport1, sport2, remainingSports);
+
+//OBJECT destructuring
+const employee = {
+  firstname: "Frank",
+  work: "Employee",
+  sex: "male",
+  hair: "brown",
+};
+
+const { firstname: username, work, sex, hair } = employee; //pull out all the desidered values from object
+//firstname is pulled out as username (javascript syntax, not typescript)
+console.log(username, work, sex, hair);
