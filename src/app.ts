@@ -63,12 +63,26 @@ age = 29; //can be changed
 // }
 
 //arrow function
-const add = (a: number, b: number) => {
-  return a + b;
-};
+// const add = (a: number, b: number) => {
+//   return a + b;
+// };
 //same as:
 // const add = (a: number, b: number) => a + b;
 // console.log(add(2, 5));
 
 // const printOutput = (output: string | number) => console.log(output);
 // printOutput(add(5, 2));
+const button = document.querySelector("button");
+if (button) {
+  button.addEventListener("click", (event) => console.log(event));
+}
+
+//****************************************
+//4.4 Default function parameters
+//set the default parameter as last not to get error
+//const add = (a: number = 10, b: number) => { ... //gets an error
+const add = (a: number, b: number = 10) => {
+  return a + b;
+};
+// console.log(add(2, 5)); //7
+console.log(add(5)); //15
