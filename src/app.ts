@@ -26,10 +26,10 @@
 
 //****************************************
 //3.5 Understanding typescript core libs
-const button = document.querySelector("button")!;
-button.addEventListener("click", () => {
-  console.log("clicked");
-});
+// const button = document.querySelector("button")!;
+// button.addEventListener("click", () => {
+//   console.log("clicked");
+// });
 //if lib[] entry is not set in tsconfig.jscon all defaults like DOM are included (like running the js in the browser)
 //uncommenting we HAVE TO set in the array some values
 //ex these are the default settings (like if "lib":[] entry is commented)
@@ -71,3 +71,26 @@ button.addEventListener("click", () => {
 //3.9 Stop emitting files on compilation errors
 // "noEmitOnError": true, <-- default is false (when commented)
 // setting it on true js will not be generated when an error is detected by js
+
+//****************************************
+//3.10 Strict compilation
+//setting: "strict": true, <-- is the same than setting all the separate settings below separately
+
+//noImplicitAny --> see analytics.ts
+
+//strictNullChecks --> if set to false it's not necessary the exclamation mark here to check if the button exists:
+// const button = document.querySelector("button"); //typescript doesn't know if button does not exist at compilation time
+// ! -->exclamation mark tells typescript about elements the dev knowns do exists
+//otherwise, without using ! do:
+// if(button) {
+//   button.addEventListener("click", () => {
+//     console.log("clicked");
+//   });
+// }
+
+//strictBindCallApply
+const button = document.querySelector("button")!;
+function clickHandler(msg: string) {
+  console.log("clicked " + msg);
+}
+button.addEventListener("click", clickHandler.bind(null, "You're wellcome!"));
