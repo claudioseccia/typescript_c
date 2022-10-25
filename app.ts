@@ -39,3 +39,9 @@ button.addEventListener("click", () => {
 //     "dom.iterable",
 //     "scripthost"
 // ]
+
+//****************************************
+//3.6 More configuration and compilation options
+//in tsconfig.json
+//"allowjs": true   //<-- includes js files
+//"checkjs": true   //<-- checks js files
