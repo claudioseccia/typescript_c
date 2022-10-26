@@ -56,10 +56,11 @@
 
 //****************************************
 //5.6 - private and public Access Modifiers
+/*
 class Department {
   //PROPERTIES
   //public and private are introduced by typescript
-  name: string; //same as public name: string;
+  private name: string; //name: string;  --> same as public name: string;
   private employees: string[] = []; //private property, also methods can be set as private
   //CONSTRUCTOR
   //constructor() is executed when the object is created
@@ -81,6 +82,38 @@ class Department {
 }
 //create a first object based on the class "blueprint":
 const accounting = new Department("Accounting");
+
+accounting.addEmployee("Max");
+accounting.addEmployee("Manu");
+//accounting.employees[2] = "Anna"; //without the private keyword the propery is a public property, accessible from the outside like this
+accounting.describe();
+accounting.printEmployeeInformation();
+*/
+//****************************************
+//5.7 - Shorthand Initialization
+/* */
+class Department {
+  //PROPERTIES
+
+  private employees: string[] = []; //private property, also methods can be set as private
+  //CONSTRUCTOR
+  //constructor() is executed when the object is created, here with shorthand initialization
+  constructor(private id: string, private name: string) {}
+  //METHOD
+  describe() {
+    //the this keywork make accessible all the properties inside the whole class
+    console.log("Department whith id " + this.id + " is:" + this.name);
+  }
+  addEmployee(employee: string) {
+    this.employees.push(employee);
+  }
+  printEmployeeInformation() {
+    console.log(this.employees.length);
+    console.log(this.employees);
+  }
+}
+//create a first object based on the class "blueprint":
+const accounting = new Department("1", "Accounting");
 
 accounting.addEmployee("Max");
 accounting.addEmployee("Manu");
