@@ -106,6 +106,7 @@
     /* or we can use a wildcard, ex "*.dev.ts" */
     "./CH_2",
     "./CH_3",
+    "./CH_4",
     "node_modules"  //would be the default
   ],
   //"include": [
