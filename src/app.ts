@@ -312,9 +312,24 @@ class Department {
   //NOTE: readonly IS ADDED BY TYPESCRIPT, it doesn't exist in javascript - it's an extry type safety check
   // private employees: string[] = []; //private property, also methods can be set as private
   protected employees: string[] = []; //makes the property accessible to the extending classes
+
+  //STATIC PROPERTY
+  static fiscalYear = 2020; //NOT available inside the class like this.fiscalYear
+
   //CONSTRUCTOR
   //constructor() is executed when the object is created, here with shorthand initialization
-  constructor(private readonly id: string, private name: string) {}
+  constructor(private readonly id: string, private name: string) {
+    // console.log(this.fiscalYear); //NOT WORKING, fiscalYear is STATIC
+    console.log(
+      "access a static method inside the class - fiscalYear",
+      Department.fiscalYear
+    ); //WORKING
+  }
+
+  //STATIC METHOD
+  static createEmployee(name: string) {
+    return { name: name };
+  }
   //METHOD
   describe() {
     //the this keywork make accessible all the properties inside the whole class
@@ -408,3 +423,23 @@ accounting.addReport("Something went wrong!");
 console.log(accounting.mostRecentReport); //GETTER prints out our last report using the getter
 accounting.printReports();
 accounting.printEmployeeInformation();
+
+//****************************************
+//5.12 - Static Methods & Properties
+
+//static properties and methods allows you to add properties and methods to a class which are not accessed through an instance of the class
+//no need to call the new Obj
+//it's part of ES6
+
+//ex.Math object
+//you don't have to instantiate the Math object like: const example = new Math(); but are accessible directly
+const pi = Math.PI; // access to a static property
+const pow = Math.pow(2, 3); //same as the ** operator 2**3
+console.log("pi", pi, "pow", pow);
+
+//SEE THE createEmployee METHOD IN THE DEPARTMENT CLASS
+const employee1 = Department.createEmployee("Frank");
+console.log("static method to access employee1", employee1);
+//we call it directly on the class without the new keyword
+const fiscalYr = Department.fiscalYear;
+console.log("static property fiscalYear", fiscalYr);
