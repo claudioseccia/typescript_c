@@ -305,6 +305,7 @@ accounting.printEmployeeInformation();
 
 //so far all the main functionalities are provided by modern javascript, except protected and type assignment
 //we can override methods or properties of our base class
+/*
 class Department {
   //PROPERTIES
   //readonly is introduced by typescript to make a property or a method not only private but not changable therefore
@@ -318,7 +319,7 @@ class Department {
 
   //CONSTRUCTOR
   //constructor() is executed when the object is created, here with shorthand initialization
-  constructor(private readonly id: string, private name: string) {
+  constructor(protected readonly id: string, private name: string) {
     // console.log(this.fiscalYear); //NOT WORKING, fiscalYear is STATIC
     console.log(
       "access a static method inside the class - fiscalYear",
@@ -392,6 +393,10 @@ class AccountingDepartment extends Department {
   printReports() {
     console.log(this.reports);
   }
+  //this methods overrides the one on the parent class
+  describe() {
+    console.log(`Accounting Department - ID: ${this.id}`);
+  }
 }
 //create a first object based on the class "blueprint":
 const generalDpt = new Department("d1", "generalDpt");
@@ -423,7 +428,7 @@ accounting.addReport("Something went wrong!");
 console.log(accounting.mostRecentReport); //GETTER prints out our last report using the getter
 accounting.printReports();
 accounting.printEmployeeInformation();
-
+*/
 //****************************************
 //5.12 - Static Methods & Properties
 
@@ -438,8 +443,129 @@ const pow = Math.pow(2, 3); //same as the ** operator 2**3
 console.log("pi", pi, "pow", pow);
 
 //SEE THE createEmployee METHOD IN THE DEPARTMENT CLASS
-const employee1 = Department.createEmployee("Frank");
-console.log("static method to access employee1", employee1);
-//we call it directly on the class without the new keyword
-const fiscalYr = Department.fiscalYear;
-console.log("static property fiscalYear", fiscalYr);
+// const employee1 = Department.createEmployee("Frank");
+// console.log("static method to access employee1", employee1);
+// //we call it directly on the class without the new keyword
+// const fiscalYr = Department.fiscalYear;
+// console.log("static property fiscalYear", fiscalYr);
+
+//****************************************
+//5.13 - Abstract Classes
+//accounting.describe(); //accessible from extending classes if not set as an abstract method into an abstract class
+
+abstract class Department {
+  //PROPERTIES
+  //readonly is introduced by typescript to make a property or a method not only private but not changable therefore
+  // private readonly id: string
+  //NOTE: readonly IS ADDED BY TYPESCRIPT, it doesn't exist in javascript - it's an extry type safety check
+  // private employees: string[] = []; //private property, also methods can be set as private
+  protected employees: string[] = []; //makes the property accessible to the extending classes
+
+  //STATIC PROPERTY
+  static fiscalYear = 2020; //NOT available inside the class like this.fiscalYear
+
+  //CONSTRUCTOR
+  //constructor() is executed when the object is created, here with shorthand initialization
+  constructor(protected readonly id: string, private name: string) {}
+
+  //STATIC METHOD
+  static createEmployee(name: string) {
+    return { name: name };
+  }
+  //ABSTRACT METHOD
+  //it has to be implemented in any class extending Department
+  abstract describe(this: Department): void; //NO IMPLEMENTATION IN THE ABSTRACT METHOD
+  addEmployee(employee: string) {
+    //this.id = 'd2';   //!!!ERROR!!! id is a readonly property
+    this.employees.push(employee);
+  }
+  printEmployeeInformation() {
+    console.log(this.name);
+    console.log(this.employees.length);
+    console.log(this.employees);
+  }
+}
+//ITDepartment inherits Department
+class ITDepartment extends Department {
+  //we need to create a dedicated constructor otherwise the Department one will be used
+  constructor(id: string, public admins: string[]) {
+    //in this example we just want the "IT" department to be hardcoded in the name property
+    super(id, "IT"); //super calls the parent class constructor
+  }
+  //ABSTRACT CLASS IMPLEMENTATION
+  describe() {
+    console.log("IT Department" + this.id);
+  }
+}
+
+class AccountingDepartment extends Department {
+  //properties
+  private lastReport: string;
+  //getter
+  get mostRecentReport() {
+    if (this.lastReport) {
+      //encapsulate returning a private property
+      return this.lastReport;
+    } else {
+      throw new Error("No report found.");
+    }
+  }
+  //setter
+  set mostRecentReport(value: string) {
+    if (!value) {
+      throw new Error("Please pass in a valid value!");
+    }
+    this.addReport(value);
+  }
+  //constructor
+  constructor(id: string, private reports: string[]) {
+    super(id, "ACCOUNTING");
+    this.lastReport = reports[0];
+  }
+
+  //OVERRIDES THE Department addEmployee method:
+  addEmployee(name: string): void {
+    //adds a dummy custom logic just as an example
+    if (name === "Max") {
+      return;
+    }
+    this.employees.push(name); //throws an error if we don't set employees from private to protected in the Department class
+  }
+  addReport(text: string) {
+    this.reports.push(text);
+    this.lastReport = text;
+  }
+  printReports() {
+    console.log(this.reports);
+  }
+  //this methods overrides the one on the parent class
+  describe() {
+    console.log(`Accounting Department - ID: ${this.id}`);
+  }
+}
+//create a first object based on the class "blueprint":
+//const generalDpt = new Department("d1", "generalDpt"); //ABSTRACT CLASS CANNOT BE INSTANTIATED!!!
+
+const it = new ITDepartment("it1", ["Max"]);
+it.addEmployee("Max");
+it.addEmployee("Manu");
+it.describe();
+it.printEmployeeInformation();
+console.log(it);
+
+const accounting = new AccountingDepartment("acc1", []);
+accounting.addEmployee("Max"); //this is ignored due to the dummy logic in the extended method of the Accounting class
+accounting.addEmployee("Manu");
+//GETTER
+// console.log(accounting.mostRecentReport); //GETTER access like a normal property -- throws our custom error in the getter
+//SETTER
+// accounting.mostRecentReport = ""; //SETTER -- throws custom Error
+accounting.mostRecentReport = "Year End Report"; //SETTER
+//GETTER
+// console.log(accounting.mostRecentReport); //GETTER prints out our last report using the getter
+//add report normal function (not accessing the last one)
+accounting.addReport("Something went wrong!");
+//GETTER
+console.log(accounting.mostRecentReport); //GETTER prints out our last report using the getter
+accounting.printReports();
+accounting.printEmployeeInformation();
