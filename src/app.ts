@@ -116,7 +116,7 @@ interface Greetable {
 class Person implements Greetable, Named {
 //NOTE: with normal inheritance, with the extends class we can only inherit from one class!!!
     ...
-*/
+
 //SOLUTION 2: the Greetable extends Named and has also the definitions within it:
 interface Named {
   readonly name: string;
@@ -141,7 +141,7 @@ user1 = new Person("Max");
 // user1.name = "Frank"; //not working!!! property is readonly in the implemented Greetable interface
 user1.greet("Hi there, my name is");
 console.log(user1);
-
+*/
 //****************************************
 //5.21 - Interfaces as Function Types
 //interfaces can also be used to define the structure of a function
@@ -163,3 +163,44 @@ let add: AddFn;
 add = (n1: number, n2: number) => {
   return n1 + n2;
 };
+
+//****************************************
+//5.22 - Optional Parameters & Properties
+
+//optional property: propertyName?: type
+//the property might exist in classes that implement this interface but it doesn't have to
+//optional method:
+//optional! => myMethod?() {}
+interface Named {
+  readonly name?: string;
+  outputName?: string;
+}
+interface Greetable extends Named {
+  greet(phrase: string): void;
+}
+//here name property and greet method have to be implemented, since the class Person implements Greetable interface:
+class Person implements Greetable {
+  name?: string;
+  //outputName: string = "..."; //OPTIONAL IN Named Interface
+  age = 30; //more properties, over the original interface
+  constructor(n?: string) {
+    //optional parameter n? --- OR --- set a default value (ex. n:string = 'hello')
+    if (n) {
+      //check for name property
+      this.name = n;
+    }
+  }
+  greet(phrase: string) {
+    if (this.name) {
+      //implementation of the greet method described in the interface
+      console.log(phrase + " " + this.name);
+    } else {
+      console.log("Hi! The name is not set :)");
+    }
+  }
+}
+let user1: Greetable; //let user1: Person; <- works too
+user1 = new Person();
+// user1.name = "Frank"; //not working!!! property is readonly in the implemented Greetable interface
+user1.greet("Hi there, my name is");
+console.log(user1);
