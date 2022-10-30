@@ -45,6 +45,7 @@ user1.greet("Hi there! I am");
 //
 //difference between abstract class and interface:
 //interface has not implementation details at all, an abstract class has (and can be overridden)
+/*
 interface Greetable {
   name: string;
   greet(phrase: string): void;
@@ -66,7 +67,35 @@ let user1: Greetable; //let user1: Person; <- works too
 user1 = new Person("Max");
 user1.greet("Hi there, my name is");
 console.log(user1);
+*/
 //****************************************
 //5.18 - Why Interfaces
 //interfaces are extremly useful when we want to share functionalities among classes, and enforce a certain structure
 //in our example ANY classes implementing greetable has to have the name and greet method as described by the interface
+//
+//****************************************
+//5.19 - Readonly Interface Properties
+//in a type or interface we can set a "readonly property"
+
+interface Greetable {
+  readonly name: string;
+  greet(phrase: string): void;
+}
+//here name property and greet method have to be implemented, since the class Person implements Greetable interface:
+class Person implements Greetable {
+  //can inherit from more than one interface like: class Person implements Greetable, AnotherInterface { ....
+  name: string;
+  age = 30; //more properties, over the original interface
+  constructor(n: string) {
+    this.name = n;
+  }
+  greet(phrase: string) {
+    //implementation of the greet method described in the interface
+    console.log(phrase + " " + this.name);
+  }
+}
+let user1: Greetable; //let user1: Person; <- works too
+user1 = new Person("Max");
+// user1.name = "Frank"; //not working!!! property is readonly in the implemented Greetable interface
+user1.greet("Hi there, my name is");
+console.log(user1);
