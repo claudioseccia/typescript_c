@@ -66,3 +66,7 @@ let user1: Greetable; //let user1: Person; <- works too
 user1 = new Person("Max");
 user1.greet("Hi there, my name is");
 console.log(user1);
+//****************************************
+//5.18 - Why Interfaces
+//interfaces are extremly useful when we want to share functionalities among classes, and enforce a certain structure
+//in our example ANY classes implementing greetable has to have the name and greet method as described by the interface
