@@ -141,3 +141,25 @@ user1 = new Person("Max");
 // user1.name = "Frank"; //not working!!! property is readonly in the implemented Greetable interface
 user1.greet("Hi there, my name is");
 console.log(user1);
+
+//****************************************
+//5.21 - Interfaces as Function Types
+//interfaces can also be used to define the structure of a function
+//
+//ex. type definition for a function with type
+/*
+type AddFn = (a: number, b: number) => number;
+let add: AddFn;
+add = (n1: number, n2: number) => {
+  return n1 + n2;
+};
+*/
+
+//ex. type definition for a function with interface
+interface AddFn {
+  (a: number, b: number): number;
+}
+let add: AddFn;
+add = (n1: number, n2: number) => {
+  return n1 + n2;
+};
