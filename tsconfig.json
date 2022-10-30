@@ -107,6 +107,7 @@
     "./CH_2",
     "./CH_3",
     "./CH_4",
+    "./CH_5",
     "node_modules"  //would be the default
   ],
   //"include": [
