@@ -76,7 +76,7 @@ console.log(user1);
 //****************************************
 //5.19 - Readonly Interface Properties
 //in a type or interface we can set a "readonly property"
-
+/*
 interface Greetable {
   readonly name: string;
   greet(phrase: string): void;
@@ -84,6 +84,48 @@ interface Greetable {
 //here name property and greet method have to be implemented, since the class Person implements Greetable interface:
 class Person implements Greetable {
   //can inherit from more than one interface like: class Person implements Greetable, AnotherInterface { ....
+  name: string;
+  age = 30; //more properties, over the original interface
+  constructor(n: string) {
+    this.name = n;
+  }
+  greet(phrase: string) {
+    //implementation of the greet method described in the interface
+    console.log(phrase + " " + this.name);
+  }
+}
+let user1: Greetable; //let user1: Person; <- works too
+user1 = new Person("Max");
+// user1.name = "Frank"; //not working!!! property is readonly in the implemented Greetable interface
+user1.greet("Hi there, my name is");
+console.log(user1);
+*/
+//****************************************
+//5.20 - Extending Interfaces
+// we can also implement inheritance with interfaces
+
+/* 
+//SOLUTION 1:
+interface Named {
+  readonly name: string;
+}
+interface Greetable {
+  greet(phrase: string): void;
+}
+//here name property and greet method have to be implemented, since the class Person implements Greetable interface:
+class Person implements Greetable, Named {
+//NOTE: with normal inheritance, with the extends class we can only inherit from one class!!!
+    ...
+*/
+//SOLUTION 2: the Greetable extends Named and has also the definitions within it:
+interface Named {
+  readonly name: string;
+}
+interface Greetable extends Named {
+  greet(phrase: string): void;
+}
+//here name property and greet method have to be implemented, since the class Person implements Greetable interface:
+class Person implements Greetable {
   name: string;
   age = 30; //more properties, over the original interface
   constructor(n: string) {
