@@ -204,3 +204,17 @@ user1 = new Person();
 // user1.name = "Frank"; //not working!!! property is readonly in the implemented Greetable interface
 user1.greet("Hi there, my name is");
 console.log(user1);
+
+//****************************************
+//5.23 - Compiling Interfaces to JavaScript - 5.24 Wrap up
+// interfaces are purely Typescript
+// it will not be translated in js during compilation
+
+//CLASSES REFEREMCE: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
+//INTERFACES REFERENCE (TypeScript):  https://www.typescriptlang.org/docs/handbook/2/objects.html
+
+// JavaScript-Private-Public-Fields
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Class_fields
+
+// Prototypes-Inheritance-in-JavaScript
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain
