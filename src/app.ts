@@ -38,3 +38,68 @@ interface ElevatedEmployee1 extends Employee1, Admin1 {
 type Combinable = string | number; // union typpe |
 type Numeric = number | boolean; // union typpe |
 type Universal = Combinable & Numeric;
+
+//****************************************
+//6.3 - More on Type Guards
+//type guards helps with union types
+//three types of type guards:
+//1) typeof - only for natives (string, number, array, boolean...)
+function add(a: Combinable, b: Combinable) {
+  //TYPE GUARD
+  if (typeof a === "string" || typeof b === "string") {
+    //type guard, to run correctly the code. If it's a string concatenates a string
+    return a.toString() + b.toString();
+  }
+  //otherwise concatenates a number
+  return a + b;
+}
+
+//2) in obj
+type UnknownEmployee = Employee | Admin;
+function printEmployeeInformation(emp: UnknownEmployee) {
+  console.log("Name: " + emp.name);
+  //TYPE GUARD: property check in the object
+  if ("privileges" in emp) {
+    console.log("Privileges (Admin type): " + emp.privileges); //privileges does only exist on Employee
+  }
+  //TYPE GUARD:
+  if ("startDate" in emp) {
+    console.log("Start Date: " + emp.startDate);
+  }
+}
+printEmployeeInformation(e1);
+//3) instanceof (IN CLASSES)
+//with interfaces we cannot use instanceof. Interfaces do not compile to any javascript
+class Car {
+  drive() {
+    console.log("Driving...");
+  }
+}
+
+class Truck {
+  drive() {
+    console.log("Driving a truck...");
+  }
+
+  loadCargo(amount: number) {
+    console.log("Loading cargo " + amount);
+  }
+}
+type Vehicle = Car | Truck;
+
+const v1 = new Car();
+const v2 = new Truck();
+
+function useVehicle(vehicle: Vehicle) {
+  vehicle.drive();
+  //TYPE GUARD used to check the property (or method) in an object
+  //in used in classes
+  //if ("loadCargo" in vehicle) {
+  //SAME AS
+  //instanceof - check if the vehicle is a truck!!!
+  if (vehicle instanceof Truck) {
+    vehicle.loadCargo(5);
+  }
+}
+useVehicle(v1);
+useVehicle(v2);
