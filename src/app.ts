@@ -103,3 +103,50 @@ function useVehicle(vehicle: Vehicle) {
 }
 useVehicle(v1);
 useVehicle(v2);
+
+//****************************************
+//6.4 - Discriminated Unions
+//helps with type guards: a pattern to implement type guards easier
+//works with interfaces and eliminates the danger of mis-typing
+interface Bird {
+  type: "bird"; //added for approach 3 (Discriminated Unions)
+  flyingSpeed: number;
+}
+interface Horse {
+  type: "horse"; //added for approach 3 (Discriminated Unions)
+  runningSpeed: number;
+}
+type Animal = Bird | Horse;
+
+function moveAnimal(animal: Animal) {
+  /*
+  //approach 1: use " in obj " schema
+  if ("flyingSpeed" in animal) {
+    console.log("Moving with speed: " + animal.flyingSpeed);
+  }
+  if ("runningSpeed" in animal) {
+    console.log("Moving with speed: " + animal.runningSpeed);
+  }
+  
+  //approach 2: "instanceof" --> DOES NOT WORK WITH INTERFACES!!! INTERFACES ARE NOT COMPILED AT RUNTIME!!!
+  if (animal instanceof Bird) {
+    console.log("Moving with speed: " + animal.flyingSpeed);
+  }
+  if (animal instanceof Horse) {
+    console.log("Moving with speed: " + animal.runningSpeed);
+  }
+  */
+  //approach 3 (Discriminated Unions)
+  let speed;
+  switch (animal.type) {
+    case "bird":
+      speed = animal.flyingSpeed;
+      break;
+    case "horse":
+      speed = animal.runningSpeed;
+      break;
+  }
+  console.log("Moving with speed: " + speed);
+}
+moveAnimal({ type: "bird", flyingSpeed: 10 }); //typescript automatically understands the type of speed to assign
+moveAnimal({ type: "horse", runningSpeed: 10 }); //typescript automatically understands the type of speed to assign
