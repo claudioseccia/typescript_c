@@ -227,3 +227,21 @@ function add(a: Combinable, b?: Combinable) {
 const result = add(1, 5);
 //const resultTxt = add("Max", "Schwarz") as string; //we enforce that the result will be a string (not necessary with function overload)
 const resultTxt = add("Max", "Schwarz"); //cmd k+i shows 4 possible overloads!
+
+//****************************************
+//6.8 - Optional Chaining
+const fetchedUserData = {
+  id: "u1",
+  name: "Max",
+  job: {
+    title: "CEO",
+    description: "My own company",
+  },
+};
+console.log(fetchedUserData.job.title); //CEO
+//if we're fetching all this data from a server not always some property might not be set, ex:
+// console.log(fetchedUserData.job.company); //undefined
+//to avoid this in javascript (runtime error) and check if job property is set:
+// console.log(fetchedUserData.job && fetchedUserData.job.title);
+// OPTIONAL CHAINING
+console.log(fetchedUserData?.job?.title); //runs the code only if job and propery is set //CEO
