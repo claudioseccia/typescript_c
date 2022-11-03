@@ -35,8 +35,9 @@ interface ElevatedEmployee1 extends Employee1, Admin1 {
   //...
 }
 //
-type Combinable = string | number; // union typpe |
-type Numeric = number | boolean; // union typpe |
+/* 
+type Combinable = string | number; // union type |
+type Numeric = number | boolean; // union type |
 type Universal = Combinable & Numeric;
 
 //****************************************
@@ -52,7 +53,8 @@ function add(a: Combinable, b: Combinable) {
   }
   //otherwise concatenates a number
   return a + b;
-}
+} 
+*/
 
 //2) in obj
 type UnknownEmployee = Employee | Admin;
@@ -195,3 +197,33 @@ const errorBag: ErrorContainer = {
   id: "1",
   email: "Not a valid email!",
 };
+
+//****************************************
+//6.7 Function Overloads
+//
+type Combinable = string | number; // union type |
+type Numeric = number | boolean; // union type |
+type Universal = Combinable & Numeric;
+//FUNCTION OVERLOAD
+function add(a: number, b: number): number;
+//string returning on all possible combinations:
+function add(a: string, b: string): string;
+function add(a: string, b: number): string;
+function add(a: number, b: string): string;
+//only one param set
+function add(a: number): number; //check for one param, b set to optional
+//end function overload
+function add(a: Combinable, b?: Combinable) {
+  //b set to optional
+  //TYPE GUARD
+  if (b) {
+    if (typeof a === "string" || typeof b === "string") {
+      return a.toString() + b.toString();
+    }
+    return a + b;
+  }
+  return a;
+}
+const result = add(1, 5);
+//const resultTxt = add("Max", "Schwarz") as string; //we enforce that the result will be a string (not necessary with function overload)
+const resultTxt = add("Max", "Schwarz"); //cmd k+i shows 4 possible overloads!
