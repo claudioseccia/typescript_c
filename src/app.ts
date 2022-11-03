@@ -178,3 +178,20 @@ userInputElement.value = "Hi there!"; //assigning the type to the element it now
 if (userInputElement) {
   (userInputElement as HTMLInputElement).value = "Hello there!";
 }
+
+//****************************************
+//6.6 Index Properties
+//let's say we want to create an interface with flexible values, like
+// { id: "1", email: "Not a valid email", username: "Must start with a character"}
+//but I don't know what elements I will have, other than email and username
+//or, for example I will have an error only on email and I want to omit username
+interface ErrorContainer {
+  id: string;
+  [prop: string]: string;
+}
+//this means that whatever object I'm constructing must have properties which are strings, expressed as strings
+//in this case only id of the error is mandatory
+const errorBag: ErrorContainer = {
+  id: "1",
+  email: "Not a valid email!",
+};
