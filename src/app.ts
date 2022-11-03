@@ -245,3 +245,22 @@ console.log(fetchedUserData.job.title); //CEO
 // console.log(fetchedUserData.job && fetchedUserData.job.title);
 // OPTIONAL CHAINING
 console.log(fetchedUserData?.job?.title); //runs the code only if job and propery is set //CEO
+
+//****************************************
+//6.9 - Nullish Coalescing - 6.10 - Wrapup
+//ex. let's have a value that we don't know if it's null, undefined or a valid value
+const userInput = ""; //let's think as we fetch this from an API
+const storedData = userInput || "DEFAULT 1"; //fallback with a default value
+//BUT!!! if --> const userInput = ''; <-- it's treated as nullish value, so it's set to 'DEFAULT 1' fallback value
+console.log(storedData);
+
+//CHECK only for null or undefined --> NULLISH COALESCING
+const userInputNull = undefined; //SAME AS SET TO null
+const storedDataIfNotNullOrUndefined = userInputNull ?? "DEFAULT 2"; //IF undefined OR null IT'S SET TO 'DEFAULT 2'
+console.log(storedDataIfNotNullOrUndefined);
+//More on Advanced Types: https://www.typescriptlang.org/docs/handbook/2/types-from-types.html
+
+//CHANGE MESSAGE OF PUSHED COMMIT
+// Navigate to the repository.
+// Amend the message of the latest pushed commit: git commit --amend -m "New commit message."
+// Force push to update the history of the remote repository: git push --force <remoteName> <branchName>
