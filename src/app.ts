@@ -150,3 +150,31 @@ function moveAnimal(animal: Animal) {
 }
 moveAnimal({ type: "bird", flyingSpeed: 10 }); //typescript automatically understands the type of speed to assign
 moveAnimal({ type: "horse", runningSpeed: 10 }); //typescript automatically understands the type of speed to assign
+
+//****************************************
+//6.5 - Type Casting
+//helps to tell typescript that some value is of a specific type
+//ex. access something in the DOM (create a paragraph in index.html)
+const paragraph = document.querySelector("p"); //selecting by the p tag
+//typescript already knows that paragraph is of type html element
+//if we assign an id to the paragraph we as devs know that but typescript doesn't
+const paragraphById = document.getElementById("message-output");
+// const userInputElement = document.getElementById("user-input");
+// userInputElement.value = "Hi there!"; //error: value does not exist on type htmlelement, cause it's generic, just as paragraphById detected by typescript
+//
+//TYPE CASTING
+//version 1
+// const userInputElement = <HTMLInputElement>(
+//   document.getElementById("user-input")!
+// );
+// userInputElement.value = "Hi there!"; //assigning the type to the element it now works!!!
+//
+//version 2 (more suitable with REACT, since Jsx already has the <TAG> syntax):
+const userInputElement = document.getElementById(
+  "user-input"
+)! as HTMLInputElement; //<--  ! EXCLAMATION MARK: tells typescript that the expression before will never return null
+userInputElement.value = "Hi there!"; //assigning the type to the element it now works!!!
+//WITHOUT EXCLAMATION MARK WE SHOULD HAVE DONE SOMETHING LIKE (! shorter and better)
+if (userInputElement) {
+  (userInputElement as HTMLInputElement).value = "Hello there!";
+}
