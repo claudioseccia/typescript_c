@@ -128,7 +128,7 @@ console.log(extractAndConvert({ name: "Max", age: 30 }, "age")); //WORKS!
 //****************************************
 //7.7 - Generic Classes
 //
-class DataStorage<T> {
+class DataStorage<T extends string | number | boolean> {
   private data: T[] = [];
   addItem(item: T) {
     this.data.push(item);
@@ -146,6 +146,7 @@ class DataStorage<T> {
 const textStorage = new DataStorage<string>();
 textStorage.addItem("Max");
 textStorage.addItem("Manu");
+// textStorage.addItem(10); //Error!!! Not a string type
 textStorage.removeItem("Max");
 console.log("textStorage", textStorage.getItems());
 
@@ -211,3 +212,21 @@ function createCourseGoal(
 const names: Readonly<string[]> = ["Max", "Anna"];
 // names.push("Manu"); //not allowed by Readonly
 // names.pop(); //not allowed by Readonly
+//
+//
+//****************************************
+//7.10 - Generic Types vs Union Types
+//
+// union type are great if we want to have a function with a set of different kind of types when we want to call it
+// generic type are great if we want to LOCK IN a certain type: THE SAME TYPE THROUGH THE ENTIRE CLASS/FUNCTION INSTANCE WE CREATE
+
+//More on Generics: https://www.typescriptlang.org/docs/handbook/generics.html
+
+// JS-Promises
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
+
+// Primitive-vs-Reference-Values
+// https://academind.com/learn/javascript/reference-vs-primitive-values/
+
+// Utility-Types-Docs
+// https://www.typescriptlang.org/docs/handbook/utility-types.html
