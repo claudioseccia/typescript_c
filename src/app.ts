@@ -56,6 +56,8 @@ const mergedObject = merge({ name: "Max" }, { age: 20 });
 //SOLUTION: <GENERICS>
 //since "object" as a type is a highly un-specified type
 //in this Generic assignment T and U are treated as any possible value extending object. Typescript automatically infers
+// function merge<T,U>(objA: T, objB: U) { //ERROR!
+//WITH TYPE CONSTRAINTS <T extends...
 function merge<T extends object, U extends object>(objA: T, objB: U) {
   //optional (TS automatically infers): ...(objA: T, objB: U): T & U
   return Object.assign(objA, objB);
@@ -72,5 +74,15 @@ console.log("mergedObject age:", mergedObject.hobbies); //WORKS!
 
 const mergedObject2 = merge({ name: "Frank" }, { age: 20 });
 console.log("mergedObject2 name:", mergedObject2.name); //WORKS!
+//
 //****************************************
-//7.
+//7.4 - Working with Constraints
+//const mergedObject3 = merge({ name: "John" }, 30);//ERROR!!
+//console.log("mergedObject3 age:", mergedObject3.age); //ERROR!!
+
+//extends keyword
+//can be anything, ex.
+
+//basic type: <T extends object....
+//union type: <T extends string|number....
+//custom type: <T extends Person ()
