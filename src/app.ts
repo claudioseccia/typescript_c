@@ -176,3 +176,38 @@ console.log("tupleStorage", tupleStorage.getItems());
 //
 //SOLUTION2: block the usage of arrays and objects for the class
 //class DataStorage<T extends string | number | boolean> { ...
+//
+//
+//****************************************
+//7.9 - Generic Utility Types
+//
+//built in generic types (only in typescript)
+//
+//Partial --> allow optional properties
+interface CourseGoal {
+  title: string;
+  description: string;
+  completeUntil: Date;
+}
+function createCourseGoal(
+  title: string,
+  description: string,
+  date: Date
+): CourseGoal {
+  //   return {
+  //     title: title,
+  //     description: description,
+  //     completeUntil: date,
+  //   };
+  //let's say we want to add all the properties one at the time
+  //let courseGoal: CourseGoal = {}; //error: cannot assign an empty object
+  let courseGoal: Partial<CourseGoal> = {}; //WORKS! allows us to set all the CourseGoal properties optional
+  courseGoal.title = title;
+  courseGoal.description = description;
+  courseGoal.completeUntil = date;
+  return courseGoal as CourseGoal;
+}
+//Readonly
+const names: Readonly<string[]> = ["Max", "Anna"];
+// names.push("Manu"); //not allowed by Readonly
+// names.pop(); //not allowed by Readonly
