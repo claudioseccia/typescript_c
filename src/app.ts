@@ -124,3 +124,55 @@ function extractAndConvert<T extends object, U extends keyof T>(
 console.log(extractAndConvert({ name: "Max", age: 30 }, "name")); //WORKS!
 console.log(extractAndConvert({ name: "Max", age: 30 }, "age")); //WORKS!
 // console.log(extractAndConvert({ name: "Max", age: 30 }, "job")); //ERROR! job key doesn't exist in the first param object
+//
+//****************************************
+//7.7 - Generic Classes
+//
+class DataStorage<T> {
+  private data: T[] = [];
+  addItem(item: T) {
+    this.data.push(item);
+  }
+  removeItem(item: T) {
+    if (this.data.indexOf(item) === -1) {
+      return;
+    }
+    this.data.splice(this.data.indexOf(item), 1); //indexOf removes the last element if it doesn't find anything
+  }
+  getItems() {
+    return [...this.data];
+  }
+}
+const textStorage = new DataStorage<string>();
+textStorage.addItem("Max");
+textStorage.addItem("Manu");
+textStorage.removeItem("Max");
+console.log("textStorage", textStorage.getItems());
+
+const numberStorage = new DataStorage<number>();
+numberStorage.addItem(3);
+numberStorage.addItem(12);
+console.log("numberStorage", numberStorage.getItems());
+
+const tupleStorage = new DataStorage<string | number>();
+tupleStorage.addItem("Max");
+tupleStorage.addItem("Frank");
+tupleStorage.addItem(14);
+tupleStorage.removeItem("Max");
+console.log("tupleStorage", tupleStorage.getItems());
+
+//const objStorage = new DataStorage<object>();
+// objStorage.addItem({ name: "Max" });
+// objStorage.addItem({ name: "Manu" });
+// objStorage.removeItem({ name: "Max" }); //NOT WORKING! the parameter in removeItem is a brand new object, removeItem does not work
+//
+//SOLUTION1 : store in a new constant the value of the object we want to remove
+// const objStorage = new DataStorage<object>();
+// const maxObject = { name: "Max" };
+// objStorage.addItem(maxObject);
+// objStorage.addItem({ name: "Manu" });
+// objStorage.removeItem(maxObject); //WORKS! same object in memory
+// console.log("objStorage", objStorage.getItems());
+//
+//SOLUTION2: block the usage of arrays and objects for the class
+//class DataStorage<T extends string | number | boolean> { ...
