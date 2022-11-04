@@ -108,3 +108,19 @@ console.log(countAndDescribe(["Sports", "Cooking"])); //[Array(2), 'Got2 element
 console.log(countAndDescribe([])); //[Array(0), 'Got no value.']
 // console.log(countAndDescribe(10)); //ERROR!! a number has not lenght value
 //
+//****************************************
+//7.6 - The keyof Constraint
+//function extractAndConvert(obj: object, key: string) { //ERROR: TS doesn't know if that object really will have that key
+//IN THIS GENERIC WE SET:
+//first parameter (type of T) should be an object
+//second parameter should be any kind of key in that object
+function extractAndConvert<T extends object, U extends keyof T>(
+  obj: T,
+  key: U
+) {
+  return "Value: " + obj[key]; //we want to return a specific key out of an object
+}
+// console.log(extractAndConvert({}, "name")); //ERROR!!
+console.log(extractAndConvert({ name: "Max", age: 30 }, "name")); //WORKS!
+console.log(extractAndConvert({ name: "Max", age: 30 }, "age")); //WORKS!
+// console.log(extractAndConvert({ name: "Max", age: 30 }, "job")); //ERROR! job key doesn't exist in the first param object
