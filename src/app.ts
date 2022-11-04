@@ -86,3 +86,25 @@ console.log("mergedObject2 name:", mergedObject2.name); //WORKS!
 //basic type: <T extends object....
 //union type: <T extends string|number....
 //custom type: <T extends Person ()
+//
+//****************************************
+//7.5 - Another Generic Function
+interface Lengthy {
+  length: number;
+}
+//return value describes the returned tuple: [T, string]
+function countAndDescribe<T extends Lengthy>(element: T): [T, string] {
+  // return a tuple with two elements: first should be my element, the second a description string
+  let descriptionText = "Got no value.";
+  if (element.length === 1) {
+    descriptionText = "Got 1 element";
+  } else if (element.length > 1) {
+    descriptionText = "Got" + element.length + " elements";
+  }
+  return [element, descriptionText];
+}
+console.log(countAndDescribe("Hi there! ")); //['Hi there! ', 'Got10 elements']
+console.log(countAndDescribe(["Sports", "Cooking"])); //[Array(2), 'Got2 elements']
+console.log(countAndDescribe([])); //[Array(0), 'Got no value.']
+// console.log(countAndDescribe(10)); //ERROR!! a number has not lenght value
+//
