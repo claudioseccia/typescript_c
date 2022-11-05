@@ -134,7 +134,7 @@ console.log(pers);
 
 //****************************************
 //8.6 - Diving into Property Decorators
-
+/*
 //simple decorator (not factory)
 //add a decorator to a property
 //receives two arguments:
@@ -161,6 +161,61 @@ class Product {
     this._price = p;
   }
   getPriceWithTax(tax: number) {
+    return this._price * (1 + tax);
+  }
+}
+*/
+//****************************************
+//8.7 - Accessor & Parameter Decorators
+//we can also write decorators to accessors (get and set)
+function Log(target: any, propertyName: string | symbol) {
+  console.log("Property decorator");
+  console.log(target); //prints prototype of the object
+  console.log(propertyName); //prints the property name "title"
+}
+//decorator for accessor (it receives three arguments: target, name and descriptor)
+//note: PropertyDescriptor is a type from typescript
+function Log2(target: any, name: string, descriptor: PropertyDescriptor) {
+  console.log("Accessor decorator!");
+  console.log("target", target);
+  console.log("name", name);
+  console.log("descriptor", descriptor);
+}
+//decorator for method
+function Log3(target: any, name: string, descriptor: PropertyDescriptor) {
+  console.log("Method decorator!");
+  console.log("target", target);
+  console.log("name", name);
+  console.log("descriptor", descriptor);
+}
+
+//decorator for parameter
+function Log4(target: any, name: string, position: number) {
+  console.log("Parameter decorator!");
+  console.log("target", target);
+  console.log("name", name);
+  console.log("descriptor", position);
+}
+
+class Product {
+  @Log
+  title: string;
+  private _price: number;
+  @Log2
+  set price(val: number) {
+    if (val > 0) {
+      this._price = val;
+    } else {
+      throw new Error("Invalid price value - should be positive");
+    }
+  }
+  constructor(t: string, p: number) {
+    this.title = t;
+    this._price = p;
+  }
+
+  @Log3
+  getPriceWithTax(@Log4 tax: number) {
     return this._price * (1 + tax);
   }
 }
