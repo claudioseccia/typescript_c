@@ -131,3 +131,36 @@ class Person {
 }
 const pers = new Person();
 console.log(pers);
+
+//****************************************
+//8.6 - Diving into Property Decorators
+
+//simple decorator (not factory)
+//add a decorator to a property
+//receives two arguments:
+//target: the prototype of the object (set to any since we dont' know the structure of the class)
+//the decorator executes before the Product class has being instantiated
+function Log(target: any, propertyName: string | symbol) {
+  console.log("Property decorator");
+  console.log(target); //prints prototype of the object
+  console.log(propertyName); //prints the property name "title"
+}
+class Product {
+  @Log
+  title: string;
+  private _price: number;
+  set price(val: number) {
+    if (val > 0) {
+      this._price = val;
+    } else {
+      throw new Error("Invalid price value - should be positive");
+    }
+  }
+  constructor(t: string, p: number) {
+    this.title = t;
+    this._price = p;
+  }
+  getPriceWithTax(tax: number) {
+    return this._price * (1 + tax);
+  }
+}
