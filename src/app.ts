@@ -17,6 +17,7 @@
 //decorator are just functions, applied to something (ex. a class)
 //decorator runs before the class is instntiated,
 //DECORATOR
+/*
 function Logger(constructor: Function) {
   console.log("Logging..."); //printed before any code in the instantiated class - runs when the class is declared (not instantiated)
   console.log(constructor);
@@ -31,4 +32,24 @@ class Person {
 }
 const pers = new Person();
 console.log(pers);
+*/
+//****************************************
+//8.3 - Working with Decorator Factories
+//besides the declaration of a decorator as before we can also define a decorator factory which returns a decorator but allows us also to configure it
+//we can now add argumentd to this function
+function Logger(logString: string) {
+  return function (constructor: Function) {
+    console.log(logString); //printed before any code in the instantiated class - runs when the class is declared (not instantiated)
+    console.log(constructor);
+  };
+}
+@Logger("LOGGING - PERSON") //EXECUTE NOW AS A FUNCTION, WITH CUSTOMIZED PARAMS
 //
+class Person {
+  name = "Max";
+  constructor() {
+    console.log("creating Person object...");
+  }
+}
+const pers = new Person();
+console.log(pers);
