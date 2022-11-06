@@ -219,3 +219,11 @@ class Product {
     return this._price * (1 + tax);
   }
 }
+//****************************************
+//8.8 - When Do Decorators Execute
+//all decorators run without instantiating the class, they all execute when we define the class!!!
+//they allow to set additional behind the scenes setup work when a class is defined
+//ex.
+const p1 = new Product("Book", 19);
+const p2 = new Product("Book2", 29);
+//nothing appens as driven by decorators: everything is already run before instantiation of the class
