@@ -94,7 +94,7 @@ console.log(pers);
 */
 //****************************************
 //8.5 Adding Multiple Decorators
-//
+/*
 function Logger(logString: string): (constructor: Function) => void {
   console.log("LOGGER FACTORY");
   return function (constructor: Function) {
@@ -131,7 +131,7 @@ class Person {
 }
 const pers = new Person();
 console.log(pers);
-
+*/
 //****************************************
 //8.6 - Diving into Property Decorators
 /*
@@ -227,3 +227,42 @@ class Product {
 const p1 = new Product("Book", 19);
 const p2 = new Product("Book2", 29);
 //nothing appens as driven by decorators: everything is already run before instantiation of the class
+//
+//****************************************
+//8.9 - Returning (and changing) a Class in a Class Decorator
+//decorators can also return values
+//decorator for class
+function WithTemplate(template: string, hookId: string) {
+  //create a generic T that extends a new object with a property string
+  //..._ spreads any parameter. _ is used as a special char to define a var even if it will not be used
+  return function <T extends { new (..._: any[]): { name: string } }>(
+    originalConstructor: T
+  ) {
+    //RETURN VALUE
+    //in this example a class extending the original constuctor with some logic
+    //in this way I need to instantiate the object so to create the instance object inside the Decorator
+    return class extends originalConstructor {
+      constructor(..._: any[]) {
+        super();
+        console.log("Rendering template...");
+        //added logic inside constructor
+        const hookEl = document.getElementById(hookId);
+        if (hookEl) {
+          hookEl.innerHTML = template;
+          hookEl.querySelector("h1")!.textContent = this.name;
+        }
+      }
+    }; //I return a constructor based on the original constructor function
+  };
+}
+
+@WithTemplate("<h1>My Person Object</h1>", "app")
+class Person {
+  name = "Max";
+  constructor() {
+    console.log("creating Person object...");
+  }
+}
+//if we comment this code THE LOGIC INSIDE THE DECORATOR WILL NOT BE EXECUTED!
+const pers = new Person();
+console.log(pers);
