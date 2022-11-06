@@ -330,3 +330,43 @@ class Product {
 }
 const p1 = new Product("Book", 19);
 const p2 = new Product("Book2", 29);
+
+//****************************************
+//8.11 - Example Creating an Autobind Decorator
+//we name target and name with _ and _2 since we're not using these paraemeters
+function AutoBind(
+  _: any,
+  _2: string | Symbol | number,
+  descriptor: PropertyDescriptor
+) {
+  //set this to the method of the object it belongs
+  const originalMethod = descriptor.value;
+  //get method: triggered by the object it belongs
+  const adjDescriptor: PropertyDescriptor = {
+    configurable: true,
+    enumerable: false,
+    get() {
+      const boundFn = originalMethod.bind(this); //this will refer to the object on wich we originally defined the method
+      return boundFn;
+    },
+  };
+  return adjDescriptor;
+}
+class Printer {
+  message = "This works!";
+  //add AutoBind to showMessage method
+  @AutoBind
+  showMessage() {
+    console.log(this.message);
+  }
+}
+const p = new Printer();
+p.showMessage(); //WORKS
+//
+const button = document.querySelector("button");
+//button?.addEventListener("click", p.showMessage); //NOT WORKING! not triggering console.log! - with eventListener we lost the this keyword
+//vanilla JS solution:
+//button?.addEventListener("click", p.showMessage.bind(p)); //WORKS - clicking the button the showMessage method is triggered
+//
+//with AutoBind now working! (same as the manual binding above!):
+button?.addEventListener("click", p.showMessage);
