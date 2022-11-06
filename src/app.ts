@@ -330,7 +330,7 @@ class Product {
 }
 const p1 = new Product("Book", 19);
 const p2 = new Product("Book2", 29);
-
+//
 //****************************************
 //8.11 - Example Creating an Autobind Decorator
 //we name target and name with _ and _2 since we're not using these paraemeters
@@ -370,3 +370,86 @@ const button = document.querySelector("button");
 //
 //with AutoBind now working! (same as the manual binding above!):
 button?.addEventListener("click", p.showMessage);
+//
+//****************************************
+//8.12 - Validation with Decorators - First Steps
+//8.13 - Validation with Decorators - Finished
+//8.14 - Fixing a Validator Bug
+//add a form to index.html
+//implement Validation
+interface ValidatorConfig {
+  [property: string]: {
+    [validatableProp: string]: string[]; //ex format:  ['required','positive'...]
+  };
+}
+
+const registeredValidators: ValidatorConfig = {};
+//target.constructor.name --> name of the Classname
+function Required(target: any, propName: string) {
+  registeredValidators[target.constructor.name] = {
+    ...registeredValidators[target.constructor.name],
+    [propName]: [
+      ...(registeredValidators[target.constructor.name]?.[propName] ?? []),
+      "required",
+    ],
+  };
+}
+//target.constructor.name --> name of the Classname
+function PositiveNumber(target: any, propName: string) {
+  registeredValidators[target.constructor.name] = {
+    ...registeredValidators[target.constructor.name],
+    [propName]: [
+      ...(registeredValidators[target.constructor.name]?.[propName] ?? []),
+      "positive",
+    ],
+  };
+}
+function validate(obj: any) {
+  //goes through all registered validators
+  //access to the class name, here with obj.constructor.name
+  const objValidatorConfig = registeredValidators[obj.constructor.name];
+  if (!objValidatorConfig) {
+    return true;
+  }
+  let isValid = true;
+  for (const prop in objValidatorConfig) {
+    for (const validator of objValidatorConfig[prop]) {
+      switch (validator) {
+        case "required":
+          isValid = isValid && !!obj[prop]; //check if truthy, to convert obj[prop] to true or false values we use !! operator
+          break;
+        case "positive":
+          isValid = isValid && obj[prop] > 0;
+          break;
+      }
+    }
+  }
+  return isValid;
+}
+class Course {
+  @Required
+  title: string;
+  @PositiveNumber
+  price: number;
+  constructor(t: string, p: number) {
+    this.title = t;
+    this.price = p;
+  }
+}
+const courseForm = document.querySelector("form")!; //! should not be null
+courseForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const titleEl = document.getElementById("title") as HTMLInputElement;
+  const priceEl = document.getElementById("price") as HTMLInputElement;
+  const title = titleEl.value;
+  const price = +priceEl.value;
+  //SOLUTION 1:
+  //if (title.trim().length > 0 && price) {}
+  //SOLUTION 2:
+  //implement decorators
+  const createdCourse = new Course(title, price);
+  if (!validate(createdCourse)) {
+    alert("Invalid input, please try again");
+  }
+  console.log(createdCourse);
+});
