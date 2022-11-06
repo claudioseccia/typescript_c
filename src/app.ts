@@ -168,6 +168,7 @@ class Product {
 //****************************************
 //8.7 - Accessor & Parameter Decorators
 //we can also write decorators to accessors (get and set)
+/* 
 function Log(target: any, propertyName: string | symbol) {
   console.log("Property decorator");
   console.log(target); //prints prototype of the object
@@ -218,19 +219,20 @@ class Product {
   getPriceWithTax(@Log4 tax: number) {
     return this._price * (1 + tax);
   }
-}
+} 
+*/
 //****************************************
 //8.8 - When Do Decorators Execute
 //all decorators run without instantiating the class, they all execute when we define the class!!!
 //they allow to set additional behind the scenes setup work when a class is defined
 //ex.
-const p1 = new Product("Book", 19);
-const p2 = new Product("Book2", 29);
+// const p1 = new Product("Book", 19);
+// const p2 = new Product("Book2", 29);
 //nothing appens as driven by decorators: everything is already run before instantiation of the class
 //
 //****************************************
 //8.9 - Returning (and changing) a Class in a Class Decorator
-//decorators can also return values
+//decorators can also return values ( in this case a decorator factory )
 //decorator for class
 function WithTemplate(template: string, hookId: string) {
   //create a generic T that extends a new object with a property string
@@ -266,3 +268,65 @@ class Person {
 //if we comment this code THE LOGIC INSIDE THE DECORATOR WILL NOT BE EXECUTED!
 const pers = new Person();
 console.log(pers);
+
+//****************************************
+//8.10 - Other Decorator Return Types
+//
+//NOTE: decorators that return something are decorator you add to methods and to accessors
+//return values on decorators for properties and parameters will be ignored
+//we can return on Log3 (method decorator) and Log2 (accessor decorator) a property descriptor
+//we can assign a value set it writable or not
+//
+function Log(target: any, propertyName: string | symbol) {
+  console.log("Property decorator");
+  console.log(target); //prints prototype of the object
+  console.log(propertyName); //prints the property name "title"
+}
+//decorator for accessor (get and set) - it receives three arguments: target, name and descriptor
+//note: PropertyDescriptor is a type from typescript
+function Log2(target: any, name: string, descriptor: PropertyDescriptor) {
+  console.log("Accessor decorator!");
+  console.log("target", target);
+  console.log("name", name);
+  console.log("descriptor", descriptor);
+}
+//decorator for method
+function Log3(target: any, name: string, descriptor: PropertyDescriptor) {
+  console.log("Method decorator!");
+  console.log("target", target);
+  console.log("name", name);
+  console.log("descriptor", descriptor);
+}
+
+//decorator for parameter
+function Log4(target: any, name: string, position: number) {
+  console.log("Parameter decorator!");
+  console.log("target", target);
+  console.log("name", name);
+  console.log("descriptor", position);
+}
+
+class Product {
+  @Log
+  title: string;
+  private _price: number;
+  @Log2
+  set price(val: number) {
+    if (val > 0) {
+      this._price = val;
+    } else {
+      throw new Error("Invalid price value - should be positive");
+    }
+  }
+  constructor(t: string, p: number) {
+    this.title = t;
+    this._price = p;
+  }
+
+  @Log3
+  getPriceWithTax(@Log4 tax: number) {
+    return this._price * (1 + tax);
+  }
+}
+const p1 = new Product("Book", 19);
+const p2 = new Product("Book2", 29);
