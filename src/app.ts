@@ -7,6 +7,26 @@
 //STEP 1: in the index.html: get the form inside the element template with id "project-input" inside the div with id "app"
 //****************************************
 //9.4 - Interacting with DOM Elements
+//
+//****************************************
+//9.5 - Creating & Using an Autobind Decorator
+//with a decorator we can automatically bind the this keyword
+//Autobind decorator
+//a decorator is a function that can execute code before the instantiation of the class
+//for that enable: "experimentalDecorators": true in tsconfig.json
+function Autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
+  const originalMethod = descriptor.value;
+  const adjDescriptor: PropertyDescriptor = {
+    configurable: true,
+    get() {
+      const boundFn = originalMethod.bind(this);
+      return boundFn;
+    },
+  };
+
+  return adjDescriptor;
+}
+//ProjectInput class
 class ProjectInput {
   templateElement: HTMLTemplateElement;
   hostElement: HTMLDivElement; //or generic HTMLElement
@@ -47,6 +67,7 @@ class ProjectInput {
     //run the private method to put the template inside app
     this.attach();
   }
+  @Autobind
   private submitHandler(event: Event) {
     event.preventDefault(); //prevent http submit request!!!
     console.log("SUBMITTED!");
@@ -56,7 +77,9 @@ class ProjectInput {
   }
   private configure() {
     //setup an event listener and bind to submit to the private submitHandler method
-    this.element.addEventListener("submit", this.submitHandler.bind(this)); //(*) bind(this) tells that this keyword inside submitHandler() will refer to the same this into the context (the class)
+    this.element.addEventListener("submit", this.submitHandler);
+    //binding is not necessary with @Autobind decorator
+    //this.element.addEventListener("submit", this.submitHandler.bind(this)); //(*) bind(this) tells that this keyword inside submitHandler() will refer to the same this into the context (the class)
   }
   private attach() {
     this.hostElement.insertAdjacentElement("afterbegin", this.element);
