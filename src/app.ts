@@ -23,6 +23,10 @@
 //9.7 - Creating a Re-Usable Validation Functionality
 //use decorators to make a reusable validation functionality
 //we want a function to use like: validate({value:enteredTitle, required: true, minLength: 5})
+//
+//****************************************
+//9.8 - Rendering Project Lists
+//
 //Validator decorator
 //? optional operator ---> ex. required?: boolean <-- means required must be a boolean or undefined
 interface Validatable {
@@ -90,7 +94,38 @@ function Autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
 
   return adjDescriptor;
 }
-//ProjectInput class
+//ProjectList Class
+class ProjectList {
+  templateElement: HTMLTemplateElement;
+  hostElement: HTMLDivElement;
+  element: HTMLElement;
+  //type of the project we'll expect when we'll instantiate the class is 'active' or 'finished'
+  constructor(private type: "active" | "finished") {
+    this.templateElement = document.getElementById(
+      "project-list"
+    )! as HTMLTemplateElement; //same as above!
+    this.hostElement = document.getElementById("app")! as HTMLDivElement;
+    const importedNode = document.importNode(
+      this.templateElement.content,
+      true
+    ); //true stands to import all the nodes inside of the html
+    this.element = importedNode.firstElementChild as HTMLElement; //set this.element as the firstElementChild (<section class="projects">...</section>)
+    this.element.id = `${this.type}-projects`; //assign the id to the element dynamically, either for active or finished projects
+    this.attach();
+    this.renderContent();
+  }
+  private renderContent() {
+    //populate the fields
+    const listId = `${this.type}-project-lists`;
+    this.element.querySelector("ul")!.id = listId; //add ids to the ul elements
+    this.element.querySelector("h2")!.textContent =
+      this.type.toUpperCase() + " PROJECTS";
+  }
+  private attach() {
+    this.hostElement.insertAdjacentElement("beforeend", this.element);
+  }
+}
+//ProjectInput Class
 class ProjectInput {
   templateElement: HTMLTemplateElement;
   hostElement: HTMLDivElement; //or generic HTMLElement
@@ -215,3 +250,5 @@ class ProjectInput {
   }
 }
 const prjInput = new ProjectInput();
+const activePrjList = new ProjectList("active");
+const finishedPrjList = new ProjectList("finished");
