@@ -453,3 +453,12 @@ courseForm.addEventListener("submit", (event) => {
   }
   console.log(createdCourse);
 });
+//
+//****************************************
+//8.15 - Wrap Up
+//lib based on decorators for validation: https://github.com/typestack/class-validator
+//Angular relies on decorators for Component decorator, for ex.
+//NestJs  (https://nestjs.com/)- server side javascript framework with heavy Typescript usage, and uses a lot decorators for defining controllers, routes, methods
+//More on Decorators: https://www.typescriptlang.org/docs/handbook/decorators.html
+//More-on-Property-Descriptors
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
