@@ -18,6 +18,66 @@
 //****************************************
 //9.6 - Fetching User Input
 //STEP 2: take all the input value and create new elements to print on the DOM
+//
+//****************************************
+//9.7 - Creating a Re-Usable Validation Functionality
+//use decorators to make a reusable validation functionality
+//we want a function to use like: validate({value:enteredTitle, required: true, minLength: 5})
+//Validator decorator
+//? optional operator ---> ex. required?: boolean <-- means required must be a boolean or undefined
+interface Validatable {
+  value: string | number;
+  required?: boolean;
+  minLength?: number;
+  maxLength?: number;
+  min?: number;
+  max?: number;
+}
+function validate(validatableInput: Validatable) {
+  // check for all the properties to exeist and do the proper validatiion
+  let isValid = true; //basic flag, set to true ->goes to false as soon as one of the checks fails
+  if (validatableInput.required) {
+    isValid = isValid && validatableInput.value.toString().trim().length !== 0;
+  }
+  //minLength check
+  if (validatableInput.minLength) {
+    //!= null -->this check includes null and undefined --> we're checking even if minLenght is zero
+    if (
+      validatableInput.minLength != null &&
+      typeof validatableInput.value === "string"
+    ) {
+      isValid =
+        isValid && validatableInput.value.length >= validatableInput.minLength;
+    }
+  }
+  //maxLength check
+  if (validatableInput.maxLength) {
+    if (
+      validatableInput.maxLength != null &&
+      typeof validatableInput.value === "string"
+    ) {
+      isValid =
+        isValid && validatableInput.value.length <= validatableInput.maxLength;
+    }
+  }
+  //min check
+  if (
+    validatableInput.min != null &&
+    typeof validatableInput.value === "number"
+  ) {
+    isValid = isValid && validatableInput.value >= validatableInput.min;
+  }
+  //max check
+  if (
+    validatableInput.max != null &&
+    typeof validatableInput.value === "number"
+  ) {
+    isValid = isValid && validatableInput.value <= validatableInput.max;
+  }
+
+  return isValid;
+}
+//Autobind decorator
 function Autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
   const originalMethod = descriptor.value;
   const adjDescriptor: PropertyDescriptor = {
@@ -78,7 +138,7 @@ class ProjectInput {
     const enteredDescription = this.descriptionInputElement.value;
     const enteredPeople = this.peopleInputElement.value;
 
-    /* */
+    /* 
     //trivial validation
     //check that no input is empty
     if (
@@ -89,6 +149,34 @@ class ProjectInput {
       //more checks, ex.
       //check length of description
       //check minumum number of people... etc
+      alert("Invalid input, please try again!");
+      return; //void return value, function is not returning anything
+    } else {
+      return [enteredTitle, enteredDescription, +enteredPeople]; //+ number conversion, everything extracted with .value from DOM is text
+    }
+    */
+    //construct my Validatable objects
+    const titleValidatable: Validatable = {
+      value: enteredTitle,
+      required: true,
+    };
+    const descriptionValidatable: Validatable = {
+      value: enteredDescription,
+      required: true,
+      minLength: 5,
+    };
+    const peopleValidatable: Validatable = {
+      value: +enteredPeople,
+      required: true,
+      min: 1,
+      max: 5,
+    };
+
+    if (
+      !validate(titleValidatable) ||
+      !validate(descriptionValidatable) ||
+      !validate(peopleValidatable)
+    ) {
       alert("Invalid input, please try again!");
       return; //void return value, function is not returning anything
     } else {
