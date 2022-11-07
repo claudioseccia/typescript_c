@@ -14,6 +14,10 @@
 //Autobind decorator
 //a decorator is a function that can execute code before the instantiation of the class
 //for that enable: "experimentalDecorators": true in tsconfig.json
+//
+//****************************************
+//9.6 - Fetching User Input
+//STEP 2: take all the input value and create new elements to print on the DOM
 function Autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
   const originalMethod = descriptor.value;
   const adjDescriptor: PropertyDescriptor = {
@@ -67,13 +71,50 @@ class ProjectInput {
     //run the private method to put the template inside app
     this.attach();
   }
+  private gatherUserInput(): [string, string, number] | void {
+    //[string, string, number] --> example of a tuple definition, we want three elements of three different types
+    //union type with void is made for the return value of nathing. Alternatively we can implement error handling and throw new error
+    const enteredTitle = this.titleInputElement.value;
+    const enteredDescription = this.descriptionInputElement.value;
+    const enteredPeople = this.peopleInputElement.value;
+
+    /* */
+    //trivial validation
+    //check that no input is empty
+    if (
+      enteredTitle.trim().length === 0 ||
+      enteredDescription.trim().length === 0 ||
+      enteredPeople.trim().length === 0
+    ) {
+      //more checks, ex.
+      //check length of description
+      //check minumum number of people... etc
+      alert("Invalid input, please try again!");
+      return; //void return value, function is not returning anything
+    } else {
+      return [enteredTitle, enteredDescription, +enteredPeople]; //+ number conversion, everything extracted with .value from DOM is text
+    }
+  }
+  //clear all the inputs after the form submit
+  private clearInputs() {
+    this.titleInputElement.value = "";
+    this.descriptionInputElement.value = "";
+    this.peopleInputElement.value = "";
+  }
   @Autobind
   private submitHandler(event: Event) {
     event.preventDefault(); //prevent http submit request!!!
     console.log("SUBMITTED!");
     //the this keyword does not point at the class
     //when we bind an element to an event  (see configure method)
-    console.log(this.titleInputElement.value); //!!ERROR!! IF WE DON'T BIND THE EVENT LISTENER IN configure() (*)
+    //console.log(this.titleInputElement.value); //!!ERROR!! IF WE DON'T BIND THE EVENT LISTENER IN configure() (*)
+    const userInput = this.gatherUserInput(); //might be a tuple
+    //cannot use typeof check for tuple, we use just array check in vanilla JS
+    if (Array.isArray(userInput)) {
+      const [title, desc, people] = userInput; //array destructuring
+      console.log(title, desc, people);
+      this.clearInputs(); //clear inputs after form submission
+    }
   }
   private configure() {
     //setup an event listener and bind to submit to the private submitHandler method
