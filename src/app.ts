@@ -27,6 +27,53 @@
 //****************************************
 //9.8 - Rendering Project Lists
 //
+//****************************************
+//9.9 - Managing Application State with Singletons
+//
+//class to manage the state of my appplication, and setup listeners for the various parts of my application
+//ProjectState Class (singleton)
+class ProjectState {
+  //listeners
+  private listeners: any[] = []; //array of function references. Everytime something changes we call a listener function
+  //array of projects
+  private projects: any[] = [];
+  //SINGLETON sutup
+  private static instance: ProjectState;
+  private constructor() {}
+  static getInstance() {
+    if (this.instance) {
+      return this.instance;
+    } else {
+      this.instance = new ProjectState();
+      return this.instance;
+    }
+  }
+  //end SINGLETON sutup
+  //subscription pattern: we manage a list of listeners called whenever something changes
+  addListener(listenerFn: Function) {
+    this.listeners.push(listenerFn);
+  }
+  //add new Project
+  addProject(title: string, description: string, numOfPeople: number) {
+    //project I want to store
+    const newProject = {
+      id: Math.random().toString(),
+      title: title,
+      description: description,
+      people: numOfPeople,
+    };
+    this.projects.push(newProject);
+    for (const listenerFn of this.listeners) {
+      listenerFn(this.projects.slice()); //slice will return a copy of that array, array and objects are reference values in javascript
+    }
+  }
+}
+//we now need to call addProject from ProjectList when submitting the form and display the result on ProjectList
+//create a global instance of ProjectState using the static getInstance method:
+//SINGLETON: we'll have only one object instance of the type for the entire application!
+const projectState = ProjectState.getInstance();
+
+//
 //Validator decorator
 //? optional operator ---> ex. required?: boolean <-- means required must be a boolean or undefined
 interface Validatable {
@@ -99,20 +146,39 @@ class ProjectList {
   templateElement: HTMLTemplateElement;
   hostElement: HTMLDivElement;
   element: HTMLElement;
+  assignedProjects: any[];
   //type of the project we'll expect when we'll instantiate the class is 'active' or 'finished'
   constructor(private type: "active" | "finished") {
     this.templateElement = document.getElementById(
       "project-list"
     )! as HTMLTemplateElement; //same as above!
     this.hostElement = document.getElementById("app")! as HTMLDivElement;
+    this.assignedProjects = [];
+    //
     const importedNode = document.importNode(
       this.templateElement.content,
       true
     ); //true stands to import all the nodes inside of the html
     this.element = importedNode.firstElementChild as HTMLElement; //set this.element as the firstElementChild (<section class="projects">...</section>)
     this.element.id = `${this.type}-projects`; //assign the id to the element dynamically, either for active or finished projects
+    //add a listener to the globally available projectState.addListener function
+    projectState.addListener((projects: any[]) => {
+      this.assignedProjects = projects;
+      this.renderProjects();
+    }); //pass an anonymous function
     this.attach();
     this.renderContent();
+  }
+  private renderProjects() {
+    const listEl = document.getElementById(
+      `${this.type}-project-lists`
+    )! as HTMLUListElement;
+    //render all the projects we have
+    for (const prjItem of this.assignedProjects) {
+      const listItem = document.createElement("li");
+      listItem.textContent = prjItem.title;
+      listEl?.appendChild(listItem);
+    }
   }
   private renderContent() {
     //populate the fields
@@ -236,6 +302,7 @@ class ProjectInput {
     if (Array.isArray(userInput)) {
       const [title, desc, people] = userInput; //array destructuring
       console.log(title, desc, people);
+      projectState.addProject(title, desc, people);
       this.clearInputs(); //clear inputs after form submission
     }
   }
@@ -249,6 +316,7 @@ class ProjectInput {
     this.hostElement.insertAdjacentElement("afterbegin", this.element);
   }
 }
+
 const prjInput = new ProjectInput();
 const activePrjList = new ProjectList("active");
 const finishedPrjList = new ProjectList("finished");
