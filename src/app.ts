@@ -33,7 +33,10 @@
 //****************************************
 //9.10 - More Classes & Custom Types
 //
-
+//****************************************
+//9.11 - Filtering Projects with Enums
+//we want to filter between active and finished projects: the best place to put filtering is our listener function (ProjectList constructor)
+//
 //Project Type
 //class to have to build project objects always with the same structure
 //a class and not an Interface or a custom type, to just instantiate it
@@ -188,7 +191,15 @@ class ProjectList {
     this.element.id = `${this.type}-projects`; //assign the id to the element dynamically, either for active or finished projects
     //add a listener to the globally available projectState.addListener function
     projectState.addListener((projects: Project[]) => {
-      this.assignedProjects = projects;
+      //filter the projects based on the type (finished or active)
+      const relevantProjects = projects.filter((prj) => {
+        if (this.type === "active") {
+          return prj.status === ProjectStatus.Active;
+        }
+        return prj.status === ProjectStatus.Finished;
+      }); //filter only the desired values and assign to a new list: relevantProjects
+      // this.assignedProjects = projects;
+      this.assignedProjects = relevantProjects;
       this.renderProjects();
     }); //pass an anonymous function
     this.attach();
@@ -198,6 +209,8 @@ class ProjectList {
     const listEl = document.getElementById(
       `${this.type}-project-lists`
     )! as HTMLUListElement;
+    //fix duplication clearing the html of the listEl
+    listEl.innerHTML = "";
     //render all the projects we have
     for (const prjItem of this.assignedProjects) {
       const listItem = document.createElement("li");
