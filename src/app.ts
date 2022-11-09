@@ -30,13 +30,37 @@
 //****************************************
 //9.9 - Managing Application State with Singletons
 //
+//****************************************
+//9.10 - More Classes & Custom Types
+//
+
+//Project Type
+//class to have to build project objects always with the same structure
+//a class and not an Interface or a custom type, to just instantiate it
+// ProjectStatus enum type
+enum ProjectStatus {
+  Active,
+  Finished,
+}
+class Project {
+  //assigning properties to the constructor automatically instantiates the properties
+  constructor(
+    public id: string,
+    public title: string,
+    public description: string,
+    public people: number,
+    public status: ProjectStatus
+  ) {}
+}
+//type Listener definition - FUNCTION
+type Listener = (items: Project[]) => void; //the listener function doesn't need to have a return, hence void
 //class to manage the state of my appplication, and setup listeners for the various parts of my application
 //ProjectState Class (singleton)
 class ProjectState {
   //listeners
-  private listeners: any[] = []; //array of function references. Everytime something changes we call a listener function
+  private listeners: Listener[] = []; //array of function references. Everytime something changes we call a listener function
   //array of projects
-  private projects: any[] = [];
+  private projects: Project[] = [];
   //SINGLETON sutup
   private static instance: ProjectState;
   private constructor() {}
@@ -50,18 +74,19 @@ class ProjectState {
   }
   //end SINGLETON sutup
   //subscription pattern: we manage a list of listeners called whenever something changes
-  addListener(listenerFn: Function) {
+  addListener(listenerFn: Listener) {
     this.listeners.push(listenerFn);
   }
   //add new Project
   addProject(title: string, description: string, numOfPeople: number) {
     //project I want to store
-    const newProject = {
-      id: Math.random().toString(),
-      title: title,
-      description: description,
-      people: numOfPeople,
-    };
+    const newProject = new Project(
+      Math.random().toString(),
+      title,
+      description,
+      numOfPeople,
+      ProjectStatus.Active
+    );
     this.projects.push(newProject);
     for (const listenerFn of this.listeners) {
       listenerFn(this.projects.slice()); //slice will return a copy of that array, array and objects are reference values in javascript
@@ -146,7 +171,7 @@ class ProjectList {
   templateElement: HTMLTemplateElement;
   hostElement: HTMLDivElement;
   element: HTMLElement;
-  assignedProjects: any[];
+  assignedProjects: Project[];
   //type of the project we'll expect when we'll instantiate the class is 'active' or 'finished'
   constructor(private type: "active" | "finished") {
     this.templateElement = document.getElementById(
@@ -162,7 +187,7 @@ class ProjectList {
     this.element = importedNode.firstElementChild as HTMLElement; //set this.element as the firstElementChild (<section class="projects">...</section>)
     this.element.id = `${this.type}-projects`; //assign the id to the element dynamically, either for active or finished projects
     //add a listener to the globally available projectState.addListener function
-    projectState.addListener((projects: any[]) => {
+    projectState.addListener((projects: Project[]) => {
       this.assignedProjects = projects;
       this.renderProjects();
     }); //pass an anonymous function
