@@ -37,6 +37,11 @@
 //9.11 - Filtering Projects with Enums
 //we want to filter between active and finished projects: the best place to put filtering is our listener function (ProjectList constructor)
 //
+//****************************************
+//9.12 - Adding Inheritance & Generics
+//generic Component class  to extend functionalities to the other classes
+//
+//
 //Project Type
 //class to have to build project objects always with the same structure
 //a class and not an Interface or a custom type, to just instantiate it
@@ -45,6 +50,7 @@ enum ProjectStatus {
   Active,
   Finished,
 }
+//Poject object definition:
 class Project {
   //assigning properties to the constructor automatically instantiates the properties
   constructor(
@@ -56,17 +62,35 @@ class Project {
   ) {}
 }
 //type Listener definition - FUNCTION
-type Listener = (items: Project[]) => void; //the listener function doesn't need to have a return, hence void
-//class to manage the state of my appplication, and setup listeners for the various parts of my application
+//type Listener = (items: Project[]) => void; //the listener function doesn't need to have a return, hence void
+//generic type definition fro State Class
+type Listener<T> = (items: T[]) => void;
+//
+
+//State Class
+//generic class defining the state (to be inherited by ProjectState)
+class State<T> {
+  //protected, private but accessible from classes that inherits:
+  protected listeners: Listener<T>[] = []; //array of function references. Everytime something changes we call a listener function
+  //subscription pattern: we manage a list of listeners called whenever something changes
+  addListener(listenerFn: Listener<T>) {
+    this.listeners.push(listenerFn);
+  }
+}
+
 //ProjectState Class (singleton)
-class ProjectState {
+//class to manage the state of my appplication, and setup listeners for the various parts of my application
+class ProjectState extends State<Project> {
   //listeners
-  private listeners: Listener[] = []; //array of function references. Everytime something changes we call a listener function
+  //private listeners: Listener[] = []; //array of function references. Everytime something changes we call a listener function
   //array of projects
   private projects: Project[] = [];
   //SINGLETON sutup
   private static instance: ProjectState;
-  private constructor() {}
+  private constructor() {
+    //for extending the State class:
+    super();
+  }
   static getInstance() {
     if (this.instance) {
       return this.instance;
@@ -76,10 +100,11 @@ class ProjectState {
     }
   }
   //end SINGLETON sutup
+  //not needed (parent class):
   //subscription pattern: we manage a list of listeners called whenever something changes
-  addListener(listenerFn: Listener) {
-    this.listeners.push(listenerFn);
-  }
+  // addListener(listenerFn: Listener) {
+  //   this.listeners.push(listenerFn);
+  // }
   //add new Project
   addProject(title: string, description: string, numOfPeople: number) {
     //project I want to store
@@ -169,27 +194,103 @@ function Autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
 
   return adjDescriptor;
 }
-//ProjectList Class
-class ProjectList {
+//
+//Component Base Class (base class for ProjectList)
+//select elements on the DOM, has the attach method and manages shared functionalities
+// T, U --> generics!
+//component: UI renderable component with some functionalities in it
+//
+//ABSTRACT CLASS CANNOT BE INSTANTIATED, ONLY USED FOR INHERITANCE
+abstract class Component<T extends HTMLElement, U extends HTMLElement> {
+  //T and U will be some kind of HTML element, depending of the needs (different from the two extending classes for hostElement and element)
   templateElement: HTMLTemplateElement;
-  hostElement: HTMLDivElement;
-  element: HTMLElement;
-  assignedProjects: Project[];
-  //type of the project we'll expect when we'll instantiate the class is 'active' or 'finished'
-  constructor(private type: "active" | "finished") {
+  hostElement: T;
+  element: U;
+  //constructor parameters:
+  //templateId - id to know how to select it
+  //hostElementId -  id of where to render this component
+  //insertAtStart - for the attach method
+  //OPTIONAL PARAMETERS ALWAYS AS LAST!:
+  //newElementId - id the element to attach (optional with the ? operator - alternative --> newElementId: string | undefined )
+  constructor(
+    templateId: string,
+    hostElementId: string,
+    insertAtBeginning: boolean,
+    newElementId?: string
+  ) {
     this.templateElement = document.getElementById(
-      "project-list"
-    )! as HTMLTemplateElement; //same as above!
-    this.hostElement = document.getElementById("app")! as HTMLDivElement;
-    this.assignedProjects = [];
-    //
+      templateId
+    )! as HTMLTemplateElement;
+    this.hostElement = document.getElementById(hostElementId)! as T;
+
     const importedNode = document.importNode(
       this.templateElement.content,
       true
     ); //true stands to import all the nodes inside of the html
-    this.element = importedNode.firstElementChild as HTMLElement; //set this.element as the firstElementChild (<section class="projects">...</section>)
-    this.element.id = `${this.type}-projects`; //assign the id to the element dynamically, either for active or finished projects
+    this.element = importedNode.firstElementChild as U; //set this.element as the firstElementChild (<section class="projects">...</section>)
+    if (newElementId) {
+      this.element.id = newElementId; //assign the id to the element dynamically, either for active or finished projects
+    }
+    this.attach(insertAtBeginning);
+  }
+  private attach(insertAtBeginning: boolean) {
+    this.hostElement.insertAdjacentElement(
+      insertAtBeginning ? "afterbegin" : "beforeend",
+      this.element
+    );
+  }
+
+  //force with abstract, any class that will inherit this one to have a configure and renderContent method:
+  abstract configure(): void;
+  abstract renderContent(): void;
+}
+//
+//ProjectList Class
+class ProjectList extends Component<HTMLDivElement, HTMLElement> {
+  //inherited by Component class:
+  // templateElement: HTMLTemplateElement;
+  // hostElement: HTMLDivElement;
+  // element: HTMLElement;
+  assignedProjects: Project[];
+  //type of the project we'll expect when we'll instantiate the class is 'active' or 'finished'
+  constructor(private type: "active" | "finished") {
+    super("project-list", "app", false, `${type}-projects`); //call the constructor from Component class
+    //inherited by Component class:
+    // this.templateElement = document.getElementById(
+    //   "project-list"
+    // )! as HTMLTemplateElement; //same as above!
+    // this.hostElement = document.getElementById("app")! as HTMLDivElement;
+    this.assignedProjects = [];
+    //inherited by Component class:
+    // const importedNode = document.importNode(
+    //   this.templateElement.content,
+    //   true
+    // ); //true stands to import all the nodes inside of the html
+    // this.element = importedNode.firstElementChild as HTMLElement; //set this.element as the firstElementChild (<section class="projects">...</section>)
+    // this.element.id = `${this.type}-projects`; //assign the id to the element dynamically, either for active or finished projects
     //add a listener to the globally available projectState.addListener function
+    //
+    //moved in the configure() method, called at the boottom:
+    // projectState.addListener((projects: Project[]) => {
+    //   //filter the projects based on the type (finished or active)
+    //   const relevantProjects = projects.filter((prj) => {
+    //     if (this.type === "active") {
+    //       return prj.status === ProjectStatus.Active;
+    //     }
+    //     return prj.status === ProjectStatus.Finished;
+    //   }); //filter only the desired values and assign to a new list: relevantProjects
+    //   // this.assignedProjects = projects;
+    //   this.assignedProjects = relevantProjects;
+    //   this.renderProjects();
+    // }); //pass an anonymous function
+    // this.attach(); //already called in the Component class
+
+    this.configure();
+    this.renderContent();
+  }
+
+  //PUBLIC METHODS
+  configure() {
     projectState.addListener((projects: Project[]) => {
       //filter the projects based on the type (finished or active)
       const relevantProjects = projects.filter((prj) => {
@@ -201,10 +302,17 @@ class ProjectList {
       // this.assignedProjects = projects;
       this.assignedProjects = relevantProjects;
       this.renderProjects();
-    }); //pass an anonymous function
-    this.attach();
-    this.renderContent();
+    });
   }
+  // private renderContent() { //already abstract in Component class
+  renderContent() {
+    //populate the fields
+    const listId = `${this.type}-project-lists`;
+    this.element.querySelector("ul")!.id = listId; //add ids to the ul elements
+    this.element.querySelector("h2")!.textContent =
+      this.type.toUpperCase() + " PROJECTS";
+  }
+  //PRIVATE METHODS
   private renderProjects() {
     const listEl = document.getElementById(
       `${this.type}-project-lists`
@@ -218,42 +326,40 @@ class ProjectList {
       listEl?.appendChild(listItem);
     }
   }
-  private renderContent() {
-    //populate the fields
-    const listId = `${this.type}-project-lists`;
-    this.element.querySelector("ul")!.id = listId; //add ids to the ul elements
-    this.element.querySelector("h2")!.textContent =
-      this.type.toUpperCase() + " PROJECTS";
-  }
-  private attach() {
-    this.hostElement.insertAdjacentElement("beforeend", this.element);
-  }
+
+  //inherited by Component class:
+  // private attach() {
+  //   this.hostElement.insertAdjacentElement("beforeend", this.element);
+  // }
 }
 //ProjectInput Class
-class ProjectInput {
-  templateElement: HTMLTemplateElement;
-  hostElement: HTMLDivElement; //or generic HTMLElement
-  element: HTMLFormElement;
+class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
+  //inherited by Component class:
+  // templateElement: HTMLTemplateElement;
+  // hostElement: HTMLDivElement; //or generic HTMLElement
+  // element: HTMLFormElement;
   titleInputElement: HTMLInputElement;
   descriptionInputElement: HTMLInputElement;
   peopleInputElement: HTMLInputElement;
   constructor() {
+    super("project-input", "app", true, "user-input");
     // this.templateElement = <HTMLTemplateElement>(
     //   document.getElementById("project-input")!
     // ); //! to tell ts that the element will exist for sure in the dom (it won't be null!)
     //or
-    this.templateElement = document.getElementById(
-      "project-input"
-    )! as HTMLTemplateElement; //same as above!
-    this.hostElement = document.getElementById("app")! as HTMLDivElement;
-    //
-    //render the content of templateElement (the form) inside the hostElement (the div)
-    const importedNode = document.importNode(
-      this.templateElement.content,
-      true
-    ); //true stands to import all the nodes inside of the html
-    this.element = importedNode.firstElementChild as HTMLFormElement;
-    this.element.id = "user-input"; //assign the id to the element so that the css will apply correctly the styles for that id
+    //inherited by Component class:
+    // this.templateElement = document.getElementById(
+    //   "project-input"
+    // )! as HTMLTemplateElement; //same as above!
+    // this.hostElement = document.getElementById("app")! as HTMLDivElement;
+    // //
+    // //render the content of templateElement (the form) inside the hostElement (the div)
+    // const importedNode = document.importNode(
+    //   this.templateElement.content,
+    //   true
+    // ); //true stands to import all the nodes inside of the html
+    // this.element = importedNode.firstElementChild as HTMLFormElement;
+    // this.element.id = "user-input"; //assign the id to the element so that the css will apply correctly the styles for that id
 
     //access the different input elements:
     this.titleInputElement = this.element.querySelector(
@@ -268,8 +374,21 @@ class ProjectInput {
     //bind the submit of the form to an internal method (submitHandler)
     this.configure();
     //run the private method to put the template inside app
-    this.attach();
+    //inherited by Component class:
+    // this.attach();
   }
+  //PUBLIC METHODS
+  // private configure() {
+  //have to set it as public since is inherited
+  configure() {
+    //setup an event listener and bind to submit to the private submitHandler method
+    this.element.addEventListener("submit", this.submitHandler);
+    //binding is not necessary with @Autobind decorator
+    //this.element.addEventListener("submit", this.submitHandler.bind(this)); //(*) bind(this) tells that this keyword inside submitHandler() will refer to the same this into the context (the class)
+  }
+  //to be compiant of the Component class we inherit from
+  renderContent() {}
+  //PRIVATE METHODS
   private gatherUserInput(): [string, string, number] | void {
     //[string, string, number] --> example of a tuple definition, we want three elements of three different types
     //union type with void is made for the return value of nathing. Alternatively we can implement error handling and throw new error
@@ -344,15 +463,11 @@ class ProjectInput {
       this.clearInputs(); //clear inputs after form submission
     }
   }
-  private configure() {
-    //setup an event listener and bind to submit to the private submitHandler method
-    this.element.addEventListener("submit", this.submitHandler);
-    //binding is not necessary with @Autobind decorator
-    //this.element.addEventListener("submit", this.submitHandler.bind(this)); //(*) bind(this) tells that this keyword inside submitHandler() will refer to the same this into the context (the class)
-  }
-  private attach() {
-    this.hostElement.insertAdjacentElement("afterbegin", this.element);
-  }
+
+  //inherited by Component class:
+  // private attach() {
+  //   this.hostElement.insertAdjacentElement("afterbegin", this.element);
+  // }
 }
 
 const prjInput = new ProjectInput();
