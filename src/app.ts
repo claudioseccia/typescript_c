@@ -56,8 +56,14 @@
 //
 //****************************************
 //9.16 - Drag Events & Reflecting the Current State in the UI
+//(implementing actual drag and drop event listeners)
+//
+//****************************************
+//9.18 - Finishing Drag & Drop
 //
 //
+//****************************************************************************************************
+//****************************************************************************************************
 //****************************************************************************************************
 //Drag & Drop Interfaces
 //not only to define the structure of some object, but also to sign a contract with some classes
@@ -154,6 +160,26 @@ class ProjectState extends State<Project> {
       ProjectStatus.Active
     );
     this.projects.push(newProject);
+    //refactoring to this.updateListeners()
+    // for (const listenerFn of this.listeners) {
+    //   listenerFn(this.projects.slice()); //slice will return a copy of that array, array and objects are reference values in javascript
+    // }
+    this.updateListeners();
+  }
+
+  //function to change the state of the project after dragging and dropping
+  //move from the list it is currently in to a new list
+  moveProject(projectId: string, newStatus: ProjectStatus) {
+    //find a project with that id in the array of projects
+    const project = this.projects.find((prj) => prj.id === projectId);
+    if (project && project.status !== newStatus) {
+      project.status = newStatus; //changes the object in the array
+      this.updateListeners();
+    }
+  }
+
+  private updateListeners() {
+    //refactoring to allow DRY of code, updates all the listeners on state change
     for (const listenerFn of this.listeners) {
       listenerFn(this.projects.slice()); //slice will return a copy of that array, array and objects are reference values in javascript
     }
@@ -388,8 +414,15 @@ class ProjectList
       listEl.classList.add("droppable"); //adds .droppable to ul emenents (droppable container): pink background (active) and bluette background (finished) on dragover
     }
   }
+  @Autobind
   dropHandler(event: DragEvent) {
-    console.log(event.dataTransfer!.getData("text/plain")); //project id we attached
+    //console.log(event.dataTransfer!.getData("text/plain")); //project id we attached
+    const prjId = event.dataTransfer!.getData("text/plain");
+    //change the project status from active to finished and viceversa
+    projectState.moveProject(
+      prjId,
+      this.type === "active" ? ProjectStatus.Active : ProjectStatus.Finished
+    ); //this.type resolves to the ProjectList type of the surrinding class
   } //react to actual drop happens (and update data in the app)
   @Autobind
   dragLeaveHandler(_: DragEvent) {
