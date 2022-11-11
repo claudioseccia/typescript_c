@@ -47,7 +47,35 @@
 //****************************************
 //9.14 - Using a Getter
 //
+//****************************************
+//9.15 - Utilizing Interfaces to Implement Drag & Drop
+//switch the project from being an Active Project to a Finished project. Not only visual.
+//two things to implement:
+//drag and drop (a bunch of event listeners)
+//behind the scenes changing the State of the application and the status property in Project class
+
 //****************************************************************************************************
+//Drag & Drop Interfaces
+//not only to define the structure of some object, but also to sign a contract with some classes
+//and force them to implement certain methods that help us with drag and drop
+//note: place draggable="true" in li inside the template with id="single-project"
+//
+//Interface Draggable - to set some object to be draggable
+//implement to any class that can be draggable (ProjectItem class)
+interface Draggable {
+  //two handlers and event listeners for this event
+  dragStartHandler(event: DragEvent): void;
+  dragEndHandler(event: DragEvent): void;
+}
+//Interface DragTarget - to set some object to be a drop target
+//implement to any class that can be a drop target (ProjectList class - the boxes where Active and Finished projects are)
+interface DragTarget {
+  //two event handlers to implement
+  dragOverHandler(event: DragEvent): void; //signal the browser and js that the thing we're trying to drag over is a valid drag target
+  dropHandler(event: DragEvent): void; //react to actual drop happens (and update data in the app)
+  dragLeaveHandler(event: DragEvent): void; //useful for giving some visual feedback to the user
+}
+
 //Project Type
 //class to have to build project objects always with the same structure
 //a class and not an Interface or a custom type, to just instantiate it
@@ -252,7 +280,10 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
   abstract renderContent(): void;
 }
 //
-class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
+class ProjectItem
+  extends Component<HTMLUListElement, HTMLLIElement>
+  implements Draggable
+{
   private project: Project;
   //getter to get the proper number of people
   get persons() {
@@ -268,7 +299,19 @@ class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
     this.configure();
     this.renderContent();
   }
-  configure() {}
+  //Draggable interface method implementation
+  @Autobind
+  dragStartHandler(event: DragEvent) {
+    console.log(event);
+  }
+  dragEndHandler(event: DragEvent) {
+    console.log("DragEnd" + event);
+  }
+  //use configure to reach elements where to implement drag and drop
+  configure() {
+    this.element.addEventListener("dragstart", this.dragStartHandler);
+    this.element.addEventListener("dragend", this.dragEndHandler);
+  }
   renderContent() {
     //added h2, h3 and p to the id "single-project" in index.html
     this.element.querySelector("h2")!.textContent = this.project.title;
@@ -277,7 +320,6 @@ class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
   }
 }
 
-//
 //ProjectList Class
 class ProjectList extends Component<HTMLDivElement, HTMLElement> {
   //inherited by Component class:
