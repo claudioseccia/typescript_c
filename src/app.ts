@@ -41,7 +41,11 @@
 //9.12 - Adding Inheritance & Generics
 //generic Component class  to extend functionalities to the other classes
 //
+//****************************************
+//9.13 - Rendering Project Items with a Class
 //
+//
+//****************************************************************************************************
 //Project Type
 //class to have to build project objects always with the same structure
 //a class and not an Interface or a custom type, to just instantiate it
@@ -194,6 +198,7 @@ function Autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
 
   return adjDescriptor;
 }
+
 //
 //Component Base Class (base class for ProjectList)
 //select elements on the DOM, has the attach method and manages shared functionalities
@@ -244,6 +249,25 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
   abstract configure(): void;
   abstract renderContent(): void;
 }
+//
+class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
+  private project: Project;
+  constructor(hostId: string, project: Project) {
+    super("single-project", hostId, false, project.id); //"single-project" ->template id, hostId -> host element ID, insert at the beginning (true), id -> id to be assigned to the newly created element
+    this.project = project;
+    this.configure();
+    this.renderContent();
+  }
+  configure() {}
+  renderContent() {
+    //added h2, h3 and p to the id "single-project" in index.html
+    this.element.querySelector("h2")!.textContent = this.project.title;
+    this.element.querySelector("h3")!.textContent =
+      this.project.people.toString();
+    this.element.querySelector("p")!.textContent = this.project.description;
+  }
+}
+
 //
 //ProjectList Class
 class ProjectList extends Component<HTMLDivElement, HTMLElement> {
@@ -321,9 +345,11 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
     listEl.innerHTML = "";
     //render all the projects we have
     for (const prjItem of this.assignedProjects) {
-      const listItem = document.createElement("li");
-      listItem.textContent = prjItem.title;
-      listEl?.appendChild(listItem);
+      // const listItem = document.createElement("li");
+      // listItem.textContent = prjItem.title;
+      // listEl?.appendChild(listItem);
+      //use the ProjectItem class (9.13):
+      new ProjectItem(this.element.querySelector("ul")!.id, prjItem);
     }
   }
 
