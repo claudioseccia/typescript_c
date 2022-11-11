@@ -306,7 +306,10 @@ class ProjectItem
   //Draggable interface method implementation
   @Autobind
   dragStartHandler(event: DragEvent) {
-    console.log(event);
+    // console.log(event);
+    //DRAG AND DROP
+    event.dataTransfer!.setData("text/plain", this.project.id); //! it won't be null
+    event.dataTransfer!.effectAllowed = "move";
   }
   dragEndHandler(event: DragEvent) {
     console.log("DragEnd" + event);
@@ -372,14 +375,22 @@ class ProjectList
   }
   //DROPPABLE IMPLEMENTATION
   @Autobind
-  dragOverHandler(_: DragEvent) {
-    //signal the browser and js that the thing we're trying to drag over is a valid drag target
-    //_ silent warnings for typescript not being event used in the function
-    //change the appearance of my draggable element: add the droppable class to the ul
-    const listEl = this.element.querySelector("ul")!;
-    listEl.classList.add("droppable"); //adds .droppable to ul emenents (droppable container): pink background (active) and bluette background (finished) on dragover
+  dragOverHandler(event: DragEvent) {
+    //DRAG AND DROP
+    //chack if drag and drop is allowed here:
+    //ckeck the same dataTransfer type of dragStartHandler of projectItem
+    if (event.dataTransfer && event.dataTransfer.types[0] === "text/plain") {
+      event.preventDefault(); //prevent default to tell js that for this element you will allow dropping - we'll now allow dropHandeler to occur
+      //signal the browser and js that the thing we're trying to drag over is a valid drag target
+      //_ silent warnings for typescript not being event used in the function
+      //change the appearance of my draggable element: add the droppable class to the ul
+      const listEl = this.element.querySelector("ul")!;
+      listEl.classList.add("droppable"); //adds .droppable to ul emenents (droppable container): pink background (active) and bluette background (finished) on dragover
+    }
   }
-  dropHandler(_: DragEvent) {} //react to actual drop happens (and update data in the app)
+  dropHandler(event: DragEvent) {
+    console.log(event.dataTransfer!.getData("text/plain")); //project id we attached
+  } //react to actual drop happens (and update data in the app)
   @Autobind
   dragLeaveHandler(_: DragEvent) {
     //update the style leaving the droppable area
