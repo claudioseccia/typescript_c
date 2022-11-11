@@ -53,7 +53,11 @@
 //two things to implement:
 //drag and drop (a bunch of event listeners)
 //behind the scenes changing the State of the application and the status property in Project class
-
+//
+//****************************************
+//9.16 - Drag Events & Reflecting the Current State in the UI
+//
+//
 //****************************************************************************************************
 //Drag & Drop Interfaces
 //not only to define the structure of some object, but also to sign a contract with some classes
@@ -321,7 +325,10 @@ class ProjectItem
 }
 
 //ProjectList Class
-class ProjectList extends Component<HTMLDivElement, HTMLElement> {
+class ProjectList
+  extends Component<HTMLDivElement, HTMLElement>
+  implements DragTarget
+{
   //inherited by Component class:
   // templateElement: HTMLTemplateElement;
   // hostElement: HTMLDivElement;
@@ -363,9 +370,30 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
     this.configure();
     this.renderContent();
   }
+  //DROPPABLE IMPLEMENTATION
+  @Autobind
+  dragOverHandler(_: DragEvent) {
+    //signal the browser and js that the thing we're trying to drag over is a valid drag target
+    //_ silent warnings for typescript not being event used in the function
+    //change the appearance of my draggable element: add the droppable class to the ul
+    const listEl = this.element.querySelector("ul")!;
+    listEl.classList.add("droppable"); //adds .droppable to ul emenents (droppable container): pink background (active) and bluette background (finished) on dragover
+  }
+  dropHandler(_: DragEvent) {} //react to actual drop happens (and update data in the app)
+  @Autobind
+  dragLeaveHandler(_: DragEvent) {
+    //update the style leaving the droppable area
+    const listEl = this.element.querySelector("ul")!;
+    listEl.classList.remove("droppable");
+  }
 
   //PUBLIC METHODS
   configure() {
+    //DRAG AND DROP EVENT LISTENERS
+    this.element.addEventListener("dragover", this.dragOverHandler);
+    this.element.addEventListener("dragleave", this.dragLeaveHandler);
+    this.element.addEventListener("drop", this.dropHandler);
+    //
     projectState.addListener((projects: Project[]) => {
       //filter the projects based on the type (finished or active)
       const relevantProjects = projects.filter((prj) => {
