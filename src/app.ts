@@ -26,6 +26,7 @@
 //move decorators to a separate file:
 /// <reference path="autobind-decorator.ts" />
 */
+/* 
 //organize in folders:
 /// <reference path="./model/drag-drop.ts" />
 /// <reference path="./model/project.ts" />
@@ -35,6 +36,13 @@
 /// <reference path="./components/base-component.ts" />
 /// <reference path="./components/project-input.ts" />
 /// <reference path="./components/project-item.ts" />
+/// <reference path="./components/project-list.ts" /> 
+*/
+
+//****************************************
+//10.05 - A problem with namespaces Imports
+//include as a namespace reference only what is needed (best of both worlds?)
+/// <reference path="./components/project-input.ts" />
 /// <reference path="./components/project-list.ts" />
 namespace App {
   new ProjectInput();
