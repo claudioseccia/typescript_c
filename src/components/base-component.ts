@@ -5,7 +5,10 @@
 //component: UI renderable component with some functionalities in it
 //
 //ABSTRACT CLASS CANNOT BE INSTANTIATED, ONLY USED FOR INHERITANCE
-export abstract class Component<T extends HTMLElement, U extends HTMLElement> {
+export default abstract class Component<
+  T extends HTMLElement,
+  U extends HTMLElement
+> {
   //T and U will be some kind of HTML element, depending of the needs (different from the two extending classes for hostElement and element)
   templateElement: HTMLTemplateElement;
   hostElement: T;

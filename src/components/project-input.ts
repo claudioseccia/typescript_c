@@ -1,6 +1,8 @@
-import { Component } from "./base-component.js";
+import Component from "./base-component.js"; //default export in base-component.js(single element on that file to be exported as default)
+// import Cmp from "./base-component.js";  //we can also use a different name in respect of the one used in base-component.js default export
+
 import { Autobind } from "../decorators/autobind.js";
-import { Validatable, validate } from "../util/validation.js";
+import * as Validation from "../util/validation.js"; //grouping everything within the object Validation
 import { projectState } from "../state/project-state.js";
 //ProjectInput Class
 export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
@@ -84,16 +86,16 @@ export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
     }
     */
     //construct my Validatable objects
-    const titleValidatable: Validatable = {
+    const titleValidatable: Validation.Validatable = {
       value: enteredTitle,
       required: true,
     };
-    const descriptionValidatable: Validatable = {
+    const descriptionValidatable: Validation.Validatable = {
       value: enteredDescription,
       required: true,
       minLength: 5,
     };
-    const peopleValidatable: Validatable = {
+    const peopleValidatable: Validation.Validatable = {
       value: +enteredPeople,
       required: true,
       min: 1,
@@ -101,9 +103,9 @@ export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
     };
 
     if (
-      !validate(titleValidatable) ||
-      !validate(descriptionValidatable) ||
-      !validate(peopleValidatable)
+      !Validation.validate(titleValidatable) ||
+      !Validation.validate(descriptionValidatable) ||
+      !Validation.validate(peopleValidatable)
     ) {
       alert("Invalid input, please try again!");
       return; //void return value, function is not returning anything
