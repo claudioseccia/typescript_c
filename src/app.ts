@@ -50,6 +50,14 @@
 //this will replicate the structure of typescript instead of a unique file bundle.js
 //import app.js in index.html, remove defer attribute and add type="module"
 
+//****************************************
+//10.08 - Understanding various Import & Export Syntaxes
+
+//MODULES are imported only once. It's preferred on Namespaces. With Webpack (CH11) we can also have bundling
+
+// More-on-JS-Modules
+// https://medium.com/computed-comparisons/commonjs-vs-amd-vs-requirejs-vs-es6-modules-2e814b114a0b
+
 import { ProjectInput } from "./components/project-input.js";
 import { ProjectList } from "./components/project-list.js";
 
