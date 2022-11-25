@@ -41,11 +41,18 @@
 
 //****************************************
 //10.05 - A problem with namespaces Imports
-//include as a namespace reference only what is needed (best of both worlds?)
-/// <reference path="./components/project-input.ts" />
-/// <reference path="./components/project-list.ts" />
-namespace App {
-  new ProjectInput();
-  new ProjectList("active");
-  new ProjectList("finished");
-}
+//Include as a namespace reference only what is needed (best of both worlds?)
+
+//****************************************
+//10.07 - Using ES6 Modules
+//remember to import all required references with .js extension!
+//change "module": "commonjs", TO "module": "es2015", IN tsconfig.json to enable es6 modules AND comment "outFile"
+//this will replicate the structure of typescript instead of a unique file bundle.js
+//import app.js in index.html, remove defer attribute and add type="module"
+
+import { ProjectInput } from "./components/project-input.js";
+import { ProjectList } from "./components/project-list.js";
+
+new ProjectInput();
+new ProjectList("active");
+new ProjectList("finished");
