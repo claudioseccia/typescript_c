@@ -1,4 +1,4 @@
-import { Project, ProjectStatus } from "../model/project.js";
+import { Project, ProjectStatus } from "../model/project";
 //Project State Management
 //type Listener definition - FUNCTION
 //type Listener = (items: Project[]) => void; //the listener function doesn't need to have a return, hence void

@@ -58,9 +58,103 @@
 // More-on-JS-Modules
 // https://medium.com/computed-comparisons/commonjs-vs-amd-vs-requirejs-vs-es6-modules-2e814b114a0b
 
-import { ProjectInput } from "./components/project-input.js";
-import { ProjectList } from "./components/project-list.js";
+//****************************************
+//11.04 - Installing Webpack & Important Dependencies
+//run:
+//npm install --save-dev webpack webpack-cli webpack-dev-server typescript ts-loader
+//
+//****************************************
+//11.05 - Adding Entry & Output Configuration
+//in tsconfig.json:
+//comment entry: "rootDir": "./src",    <-- webpack manages that
+//keep: "target": "es6",  -- "module": "es2015",
+//create another configuration file: webpack.config.js
+//insert into that:
+/*
+const path = require("path");
+module.exports = {
+    entry: "./src/app.ts",
+    output: {
+        filename: "bundle.js",
+        path: path.resolve(__dirname,'dist')
+    },
+    
+};
+*/
+//remove all .js from the imports of ALL the files, like: import { ProjectInput } from "./components/project-input";
+//****************************************
+//11.06 - Adding TypeScript Support with the ts-loader Package
+// add these lines to module.exports in webpack.config.js:
+/*
+ module: {
+        rules: [ //define the tests and use ts-lader excludin node_modules
+            {
+                test: /\.ts$/,
+                use: "ts-loader",
+                exclude: /node_modules/
+            }
+        ]
+    },
+    resolve: {
+        extensions: [".ts",".js"] //bundles all ts and js extensions file
+    }
+*/
+// go back in ts-config.json and make sure "sourceMap": true, is enabled
+// to add webpack.config.js in  module.exports:
+//devtools: "inline-source-map",
+// go to package.json file and add to scripts:
+/* 
+"scripts": {
+    ...
+    "build": "webpack"
+}
+*/
+// remove everything in /dist folder
+//RUN: npm run build
+//modify index.html to point to bundle.js: <script type="module" src="dist/bundle.js"></script>
+//run: npm start <-- test the application with lite-server
+
+//****************************************
+//11.07 - Finishing the Setup & Adding webpack-dev-server
+//add two environments: one for production and one for development
+// add webpack-dev-server to package.json
+/*
+"scripts": {
+    ...
+    "start": "webpack-dev-server",
+...
+*/
+
+//NOTE: for webpack-dev-server 4+
+//https://stackoverflow.com/questions/71602863/webpack-dev-server-cannot-get
+//change this in webpack.config.js
+/* 
+output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/dist/',
+},
+devServer: {
+    static: {
+        directory: path.join(__dirname, '/')
+    }
+}... 
+*/
+//AND SET THIS IN package.json:
+/*
+"scripts": {
+    ...
+    "start": "webpack serve",
+    ...
+*/
+//IN webpack.config.js
+//mode: 'development',
+//will give more meaningful error messages!
+//****************************************
+import { ProjectInput } from "./components/project-input";
+import { ProjectList } from "./components/project-list";
 
 new ProjectInput();
 new ProjectList("active");
 new ProjectList("finished");
+console.log("HI");

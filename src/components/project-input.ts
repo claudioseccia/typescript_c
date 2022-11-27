@@ -1,9 +1,9 @@
-import Component from "./base-component.js"; //default export in base-component.js(single element on that file to be exported as default)
-// import Cmp from "./base-component.js";  //we can also use a different name in respect of the one used in base-component.js default export
+import Component from "./base-component"; //default export in base-component.js(single element on that file to be exported as default)
+// import Cmp from "./base-component.js";  //we can also use a different name in respect of the one used in base-component default export
 
-import { Autobind } from "../decorators/autobind.js";
-import * as Validation from "../util/validation.js"; //grouping everything within the object Validation
-import { projectState } from "../state/project-state.js";
+import { Autobind } from "../decorators/autobind";
+import * as Validation from "../util/validation"; //grouping everything within the object Validation
+import { projectState } from "../state/project-state";
 //ProjectInput Class
 export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
   //inherited by Component class:
