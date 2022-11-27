@@ -149,8 +149,16 @@ devServer: {
 */
 //IN webpack.config.js
 //mode: 'development',
+//devtool: 'inline-source-map',
 //will give more meaningful error messages!
 //****************************************
+//11.08 - Adding a Production Workflow
+//create webpack.config.prod.js
+//change entry: devtool: 'nosources-source-map', <-- https://webpack.js.org/configuration/devtool/
+//npm install --save-dev clean-webpack-plugin
+//in package.json, add: "build": "webpack --config webpack.config.prod.js"
+//****************************************
+//11.09 - WrapUp
 import { ProjectInput } from "./components/project-input";
 import { ProjectList } from "./components/project-list";
 
