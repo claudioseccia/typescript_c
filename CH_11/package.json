@@ -10,7 +10,6 @@
   "author": "Maximilian Schwarzmüller",
   "license": "ISC",
   "devDependencies": {
-    "@types/lodash": "^4.14.190",
     "clean-webpack-plugin": "^4.0.0",
     "lite-server": "^2.6.1",
     "ts-loader": "^9.4.1",
@@ -19,8 +18,5 @@
     "webpack-cli": "^5.0.0",
     "webpack-dev-server": "^4.11.1"
   },
-  "description": "",
-  "dependencies": {
-    "lodash": "^4.17.21"
-  }
+  "description": ""
 }
